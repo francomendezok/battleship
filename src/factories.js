@@ -32,8 +32,8 @@ class Gameboard {
     createBoard(size = 8 ) {
         for (let i = 0; i < size; i += 1) {
           for (let j = 0; j < size; j += 1) {
-            this.board.push([i, j]);
-          }
+            this.board.push([`${[i,j]}`, {hit: false}]);
+        }
         }
         return this.board;
       }
@@ -41,7 +41,7 @@ class Gameboard {
 
 let board = new Gameboard();
 let result = board.createBoard();
-console.log(result);
+
 // Note that we have not yet created any User Interface. We should know our code is coming together by running the tests. You shouldn’t be relying on console.log or DOM methods to make sure your code is doing what you expect it to.
 // Gameboards should be able to place ships at specific coordinates by calling the ship factory function.
 // Gameboards should have a receiveAttack function that takes a pair of coordinates, determines whether or not the attack hit a ship and then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot.
@@ -50,6 +50,30 @@ console.log(result);
 
 
 // Player Class //
+
+class Player {
+    constructor () {
+
+    }
+
+    isMoveLegal (move) {
+        // if gameboard includes move && gameboard[move].hit return true;
+    }
+
+    makeRandomMove () {
+        let num1 = Math.floor(Math.random() * 8); 
+        let num2 = Math.floor(Math.random() * 8); 
+        let result = [`${num1, num2}`];
+
+        while (!isMoveLegal(result)) {
+            num1 = Math.floor(Math.random() * 8); 
+            num2 = Math.floor(Math.random() * 8); 
+            result = [`${num1, num2}`];
+        }
+        
+        return result;
+    }
+}
 
 
 // Players can take turns playing the game by attacking the enemy Gameboard.
