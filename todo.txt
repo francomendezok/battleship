@@ -1,0 +1,2 @@
+1. Write tests, check they work
+2. Create mocks to test DOM methhods
