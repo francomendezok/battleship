@@ -1,3 +1,6 @@
 1. Write tests, check they work
 2. Create mocks to test DOM methhods
 3. Factorie Classes
+
+
+// FIRST procede with Tests, then the actual coding logic // 

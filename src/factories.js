@@ -52,8 +52,8 @@ let result = board.createBoard();
 // Player Class //
 
 class Player {
-    constructor () {
-
+    constructor (gameboard) {
+        this.gameboard = gameboard;
     }
 
     isMoveLegal (move) {
