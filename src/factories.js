@@ -4,43 +4,78 @@ class Ship {
         this.size = size;
         this.hit = 0;
         this.sunk = false;
+        this.coordinates = [];
     }
 
-    hit () {
+    registerHit() {
         return this.hit += 1;
     }
 
-    isSunk () {
+    isSunk() {
         return this.hit === this.size;
+    }
+
+    addCoordinates (position) {
+        this.coordinates.push(position);
     }
 }
 
-
-// Your ‘ships’ will be objects that include their length, the number of times they’ve been hit and whether or not they’ve been sunk.
-// REMEMBER you only have to test your object’s public interface. Only methods or properties that are used outside of your ‘ship’ object need unit tests.
-// Ships should have a hit() function that increases the number of ‘hits’ in your ship.
-// isSunk() should be a function that calculates it based on their length and the number of ‘hits’. 
-
-
 // Gameboard Class //
-
 class Gameboard {
     constructor () {
-        this.board = [];
+        this.board = [] 
+        this.ships = []
     }
     
     createBoard(size = 8 ) {
         for (let i = 0; i < size; i += 1) {
           for (let j = 0; j < size; j += 1) {
-            this.board.push([`${[i,j]}`, {hit: false}]);
+            const coordinate = `${i},${j}`;
+            this.board[coordinate] = { hit: false, missed: false, hasShip: false, ship: [] };
         }
         }
         return this.board;
       }
+
+      getBoard() {
+        return this.board;
+      }
+
+      addShip (ship) {
+        this.ships.push(ship);
+      }
+
+      placeShip (size, coordinates) {
+        const ship = new Ship(size);
+            for (let i = 0; i < coordinates.length; i++) {
+               this.board[coordinates[i]].ship.push(coordinates);
+               this.board[coordinates[i]].hasShip = true;
+            }
+        ship.addCoordinates(coordinates);
+        this.addShip(ship);
+            return this.board;
+      }
+
+      getShips () {
+        return this.ships;
+      }
+
+      allSunk () {
+        return this.ships.every(ship => ship.sunk === true);
+      }
 }
 
+
 let board = new Gameboard();
-let result = board.createBoard();
+board.createBoard();
+board.placeShip(3, ['7,1', '7,2','7,3'])
+board.placeShip(5, ['0,1', '0,2','0,3'])
+board.ships[0].sunk = true;
+board.ships[1].sunk = true;
+
+
+// console.log(board.getShips()[0]);
+console.log(board);
 
 // Note that we have not yet created any User Interface. We should know our code is coming together by running the tests. You shouldn’t be relying on console.log or DOM methods to make sure your code is doing what you expect it to.
 // Gameboards should be able to place ships at specific coordinates by calling the ship factory function.
@@ -79,3 +114,6 @@ class Player {
 // Players can take turns playing the game by attacking the enemy Gameboard.
 // The game is played against the computer, so make the ‘computer’ capable of making random plays. 
 // The AI does not have to be smart, but it should know whether or not a given move is legal (i.e. it shouldn’t shoot the same coordinate twice).
+
+
+module.exports = {Ship, Gameboard, Player};
