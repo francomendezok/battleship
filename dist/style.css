@@ -31,6 +31,9 @@ ol, ul {
 }
 
 
+
+
+
 html, body {
     height: 100%;
     width: 100%;
@@ -94,4 +97,47 @@ footer {
 a {
     text-decoration: none;
     color: white;
+}
+
+.pop-up-box {
+    width: 50%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.title-pop-up {
+    color: white;
+    font-size: 300%;
+}
+
+.input-pop-up {
+    width: 50%;
+    height: 10%;
+    border-radius: 6px;
+    border: none;
+    box-shadow: 8px 8px 12px rgba(0, 0, 0, 0.4);
+    font-size: 36px;
+    text-align: center;
+    font-family: Bebas Neue;
+}
+
+.input-pop-up:focus {
+    border: none;
+    outline: none;
+}
+
+
+.play-button {
+    margin-top: 2%;
+    font-size: 200%;
+    font-family: Bebas Neue;
+    border-radius: 6px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    width: 20%;
+    text-align: center;
 }
