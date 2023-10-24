@@ -111,3 +111,49 @@ describe('Gameboard', () => {
     expect(gameboard.allSunk()).toBe(true);
   });
 });
+
+// Player // 
+
+describe('Player', () => {
+  let player;
+  let gameboard;
+
+  beforeEach(() => {
+    gameboard = new Gameboard();
+    gameboard.createBoard();
+    gameboard.board['0,0'] = { attacked: false, missed: false }; 
+    gameboard.board['1,1'] = { attacked: true, missed: false };
+    
+    player = new Player(gameboard);
+  });
+
+  test('checks if a move is legal when not attacked or missed', () => {
+    const legalMove = player.isMoveLegal('0,0');
+    expect(legalMove).toBe(true);
+  });
+
+  test('checks if a move is legal when already attacked', () => {
+    const illegalMove = player.isMoveLegal('1,1');
+    expect(illegalMove).toBe(false);
+  });
+
+  test('makes a random legal move', () => {
+    const randomMove = player.makeRandomMove();
+
+    // Ensure that the randomly generated move is a legal move
+    expect(player.isMoveLegal(randomMove)).toBe(true);
+  });
+
+  test('makes multiple random legal moves', () => {
+    const legalMoves = new Set();
+    for (let i = 0; i < 100; i++) {
+      const randomMove = player.makeRandomMove();
+      legalMoves.add(randomMove);
+    }
+
+    // Ensure that all randomly generated moves are legal
+    legalMoves.forEach((move) => {
+      expect(player.isMoveLegal(move)).toBe(true);
+    });
+  });
+});

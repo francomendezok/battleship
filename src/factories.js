@@ -140,9 +140,6 @@ class Player {
 }
 
 const play = new Player(board);
-console.log(play.makeRandomMove());
-// Players can take turns playing the game by attacking the enemy Gameboard.
-// The game is played against the computer, so make the ‘computer’ capable of making random plays. 
 
 
 module.exports = {Ship, Gameboard, Player};
