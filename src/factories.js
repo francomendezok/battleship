@@ -110,7 +110,6 @@ board.receiveAttack('7,3');
 
 
 // Player Class //
-
 class Player {
     constructor (gameboard) {
         this.gameboard = gameboard;
