@@ -141,3 +141,50 @@ a {
     width: 20%;
     text-align: center;
 }
+
+.my-section, .enemy-section {
+    width: 50%;
+    height: 100%;
+}
+
+.my-name-box, .enemy-name-box {
+    width: 100%;
+    height: 5%;
+    color: white;
+    text-align: center;
+    font-size: 200%;
+}
+
+.my-game-section, .enemy-game-section {
+    width: 100%;
+    height: 95%;
+}
+
+.my-board, .enemy-board {
+    display: grid;
+    grid-template-columns: repeat(8, 12.5%);
+    grid-template-rows: repeat(8, 12.5%);
+    width: 80%;
+    height: 100%;
+}
+
+.div-box {
+    background-color: lightblue;
+    border: 1px solid black;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 200%;
+}
+
+
+.main-game {
+    width: 100%;
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+  
