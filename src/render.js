@@ -27,7 +27,10 @@ function writeName () {
 
     main.appendChild(box);
 
-    play.addEventListener('click', clean);
+    play.addEventListener('click', () => {
+        clean();
+        renderInitalBoards();
+    });
 }
 
 function renderInitalBoards () {
@@ -46,6 +49,44 @@ function renderInitalBoards () {
     const enemyShips = document.createElement('div');
     const enemyNameBox = document.createElement('div');
     const enemyName = document.createElement('h3');
+
+    const carrier = document.createElement('img');
+    const battleship = document.createElement('img');
+    const cruiser = document.createElement('img');
+    const submarine = document.createElement('img');
+    const destroyer = document.createElement('img');
+
+    carrier.src = '../dist/Images/5.png';
+    battleship.src = '../dist/Images/5.png';
+    cruiser.src = '../dist/Images/5.png';
+    submarine.src = '../dist/Images/5.png';
+    destroyer.src = '../dist/Images/5.png';
+
+    const enemyCarrier = document.createElement('img');
+    const enemyBattleship = document.createElement('img');
+    const enemyCruiser = document.createElement('img');
+    const enemySubmarine = document.createElement('img');
+    const enemyDestroyer = document.createElement('img');
+
+    enemyCarrier.src = '../dist/Images/5.png';
+    enemyBattleship.src = '../dist/Images/5.png';
+    enemyCruiser.src = '../dist/Images/5.png';
+    enemySubmarine.src = '../dist/Images/5.png';
+    enemyDestroyer.src = '../dist/Images/5.png';
+
+    const ships = [carrier, battleship, cruiser, submarine, destroyer];
+
+    const rivalShips = [enemyCarrier, enemyBattleship, enemyCruiser, enemySubmarine, enemyDestroyer];
+
+    ships.forEach(ship => {
+        ship.classList.add('ship');
+        myShips.appendChild(ship);
+    });
+
+    rivalShips.forEach(enemy => {
+        enemy.classList.add('ship');
+        enemyShips.appendChild(enemy);
+    });
 
 
     mySection.classList.add('my-section');
@@ -72,6 +113,7 @@ function renderInitalBoards () {
         enemyBoard.appendChild(divEnemy);
     }
 
+
     myName.textContent = 'Franco';
     enemyName.textContent = 'Enemy';
 
@@ -93,9 +135,63 @@ function renderInitalBoards () {
     main.classList.add('main-game');
 }
 
+function renderBoard () {
+    // render board each time a hit or missed is made // 
+}
+
+function renderWin () {
+    const main = document.getElementById('main');
+    const box = document.createElement('div');
+    const title = document.createElement('h3'); 
+    const play = document.createElement('button')
+
+    box.classList.add('pop-up-box');
+    title.classList.add('title-pop-up');
+    play.classList.add('play-button');
+
+    title.textContent = 'You Win';
+    play.innerHTML = 'Play Again';
+    play.type = 'submit';
+
+    box.appendChild(title);
+    box.appendChild(play);
+
+    main.appendChild(box);
+
+    play.addEventListener('click', () => {
+        clean();
+        writeName();
+    });
+}
+
+function renderLose () {
+    const main = document.getElementById('main');
+    const box = document.createElement('div');
+    const title = document.createElement('h3'); 
+    const play = document.createElement('button')
+
+    box.classList.add('pop-up-box');
+    title.classList.add('title-pop-up');
+    play.classList.add('play-button');
+
+    title.textContent = 'You Lose';
+    play.innerHTML = 'Play Again';
+    play.type = 'submit';
+
+    box.appendChild(title);
+    box.appendChild(play);
+
+    main.appendChild(box);
+
+    play.addEventListener('click', () => {
+        clean();
+        writeName();
+    });
+}
+
 function clean () {
     const main = document.getElementById('main');
     main.innerHTML = '';
 }
 
-export {writeName, clean, renderInitalBoards};
+export {writeName, clean, renderInitalBoards, renderWin, renderLose};
