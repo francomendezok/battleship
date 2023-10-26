@@ -103,16 +103,21 @@ function renderInitalBoards () {
     enemyNameBox.classList.add('enemy-name-box');
     enemyName.classList.add('enemy-name');
 
-    for (let i = 0; i < 64; i++) {
-        const div = document.createElement('div');
-        const divEnemy = document.createElement('div');
-        div.classList.add('div-box');
-        divEnemy.classList.add('div-box');
+    for (let i = 0; i < 8; i += 1) {
+        for (let j = 0; j < 8; j += 1) {
+          const coordinate = `${i},${j}`;
+          const div = document.createElement('div');
+          const divEnemy = document.createElement('div');
+          div.classList.add('my-div-box');
+          divEnemy.classList.add('enemy-div-box');
 
-        myBoard.appendChild(div);
-        enemyBoard.appendChild(divEnemy);
+          div.id = `P ${coordinate}`;
+          divEnemy.id = `E ${coordinate}`;
+  
+          myBoard.appendChild(div);
+          enemyBoard.appendChild(divEnemy);
+        }
     }
-
 
     myName.textContent = 'Franco';
     enemyName.textContent = 'Enemy';
@@ -135,8 +140,76 @@ function renderInitalBoards () {
     main.classList.add('main-game');
 }
 
-function renderBoard () {
-    // render board each time a hit or missed is made // 
+function renderMyBoard (board) {
+    const boxes = document.querySelectorAll('.my-div-box');
+
+    for (const box of boxes) {
+        let coordinates = box.id;
+        let split = coordinates.split(' ');
+        let num = split[1]; 
+        
+        if (board.board[num].hasShip) {
+            box.style.background = 'green';
+        }
+        if (board.board[num].attacked) {
+            box.style.background = 'red';
+        }
+        if (board.board[num].missed) {
+            box.style.background = 'white';
+        }
+    }
+}
+
+function renderEnemyBoard (board) {
+    const boxes = document.querySelectorAll('.enemy-div-box');
+
+    for (const box of boxes) {
+        let coordinates = box.id;
+        let split = coordinates.split(' ');
+        let num = split[1]; 
+        
+        if (board.board[num].hasShip) {
+            box.style.background = 'orange';
+        }
+        if (board.board[num].attacked) {
+            box.style.background = 'red';
+        }
+        if (board.board[num].missed) {
+            box.style.background = 'white';
+        }
+    }
+}
+
+function dragAndDrop () {
+    let ships = document.querySelectorAll('.ship');
+    let boxes = document.querySelectorAll('.my-div-box');
+
+    ships.forEach(ship => {
+        ship.draggable = true;
+    
+        ship.addEventListener('dragstart', (e) => {
+            let selected = e.target;
+            boxes.forEach(box => {
+                box.addEventListener('dragover', () => {
+                    box.style.background = 'red';
+                });
+                box.addEventListener('dragend', (e) => {
+                    // let boxId = e.target.id;
+                    // let myBox = document.getElementById(boxId);
+                    // console.log(e.target);
+                    // myBox.appendChild(selected);
+                    // selected = null;
+                });
+                box.addEventListener('drop', (e) => {
+                    // let boxId = e.target.id;
+                    // let myBox = document.getElementById(boxId);
+                    console.log(e.target);
+                    // myBox.appendChild(selected);
+                    // selected = null;
+                });
+            });
+        });
+    });
 }
 
 function renderWin () {
@@ -194,4 +267,5 @@ function clean () {
     main.innerHTML = '';
 }
 
-export {writeName, clean, renderInitalBoards, renderWin, renderLose};
+
+export {writeName, clean, renderInitalBoards, renderMyBoard, renderEnemyBoard, renderWin, renderLose};
