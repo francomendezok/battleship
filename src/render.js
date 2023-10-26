@@ -1,7 +1,7 @@
 // DOM Manipulation, Render the Game // 
 
 // Render Write Your Name // 
-
+import { game } from "./game";
 
 function writeName () {
     const main = document.getElementById('main');
@@ -29,24 +29,24 @@ function writeName () {
 
     play.addEventListener('click', () => {
         clean();
-        renderInitalBoards();
+        game(input.value);
     });
 }
 
-function renderInitalBoards () {
+function renderInitalBoards (name) {
     const main = document.getElementById('main');
 
     const mySection = document.createElement('div');
     const myGameSection = document.createElement('div');
     const myBoard = document.createElement('div');
-    const myShips = document.createElement('div');
     const myNameBox = document.createElement('div');
     const myName = document.createElement('h3');
-
+    
+    const shipsContainer = document.createElement('div');
+    
     const enemySection = document.createElement('div');
     const enemyGameSection = document.createElement('div');
     const enemyBoard = document.createElement('div');
-    const enemyShips = document.createElement('div');
     const enemyNameBox = document.createElement('div');
     const enemyName = document.createElement('h3');
 
@@ -62,44 +62,27 @@ function renderInitalBoards () {
     submarine.src = '../dist/Images/5.png';
     destroyer.src = '../dist/Images/5.png';
 
-    const enemyCarrier = document.createElement('img');
-    const enemyBattleship = document.createElement('img');
-    const enemyCruiser = document.createElement('img');
-    const enemySubmarine = document.createElement('img');
-    const enemyDestroyer = document.createElement('img');
-
-    enemyCarrier.src = '../dist/Images/5.png';
-    enemyBattleship.src = '../dist/Images/5.png';
-    enemyCruiser.src = '../dist/Images/5.png';
-    enemySubmarine.src = '../dist/Images/5.png';
-    enemyDestroyer.src = '../dist/Images/5.png';
 
     const ships = [carrier, battleship, cruiser, submarine, destroyer];
 
-    const rivalShips = [enemyCarrier, enemyBattleship, enemyCruiser, enemySubmarine, enemyDestroyer];
 
     ships.forEach(ship => {
         ship.classList.add('ship');
-        myShips.appendChild(ship);
+        shipsContainer.appendChild(ship);
     });
-
-    rivalShips.forEach(enemy => {
-        enemy.classList.add('ship');
-        enemyShips.appendChild(enemy);
-    });
-
-
+    
+    
+    
     mySection.classList.add('my-section');
     myGameSection.classList.add('my-game-section');
     myBoard.classList.add('my-board');
-    myShips.classList.add('my-ships');
     myNameBox.classList.add('my-name-box');
     myName.classList.add('my-name');
-
+    
+    shipsContainer.classList.add('my-ships');
     enemySection.classList.add('enemy-section');
     enemyGameSection.classList.add('enemy-game-section');
     enemyBoard.classList.add('enemy-board');
-    enemyShips.classList.add('enemy-ships');
     enemyNameBox.classList.add('enemy-name-box');
     enemyName.classList.add('enemy-name');
 
@@ -119,22 +102,21 @@ function renderInitalBoards () {
         }
     }
 
-    myName.textContent = 'Franco';
+    myName.textContent = name;
     enemyName.textContent = 'Enemy';
 
     myNameBox.appendChild(myName);
     myGameSection.appendChild(myBoard);
-    myGameSection.appendChild(myShips);
     mySection.appendChild(myNameBox);
     mySection.appendChild(myGameSection);
-
+    
     enemyNameBox.appendChild(enemyName);
     enemyGameSection.appendChild(enemyBoard);
-    enemyGameSection.appendChild(enemyShips);
     enemySection.appendChild(enemyNameBox);
     enemySection.appendChild(enemyGameSection);
 
     main.appendChild(mySection);
+    main.appendChild(shipsContainer);
     main.appendChild(enemySection);
 
     main.classList.add('main-game');
@@ -152,10 +134,12 @@ function renderMyBoard (board) {
             box.style.background = 'green';
         }
         if (board.board[num].attacked) {
-            box.style.background = 'red';
+            box.innerHTML = '❌';
+            box.style.background = '#F5C2C1';
         }
         if (board.board[num].missed) {
-            box.style.background = 'white';
+            box.innerHTML = '💦';
+            box.style.background = 'lightblue';
         }
     }
 }
@@ -172,10 +156,12 @@ function renderEnemyBoard (board) {
             box.style.background = 'orange';
         }
         if (board.board[num].attacked) {
-            box.style.background = 'red';
+            box.innerHTML = '❌';
+            box.style.background = '#F5C2C1';
         }
         if (board.board[num].missed) {
-            box.style.background = 'white';
+            box.innerHTML = '💦';
+            box.style.background = 'lightblue';
         }
     }
 }

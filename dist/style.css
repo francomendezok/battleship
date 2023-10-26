@@ -143,7 +143,7 @@ a {
 }
 
 .my-section, .enemy-section {
-    width: 50%;
+    width: 40%;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -162,7 +162,7 @@ a {
 .my-game-section, .enemy-game-section {
     display: flex;
     justify-content: space-evenly;
-    width: 100%;
+    width: 130%;
     height: 90%;
 }
 
@@ -174,12 +174,18 @@ a {
     height: 100%;
 }
 
-.my-ships, .enemy-ships {
+.my-ships {
+    width: 10%;
+    height: 100%;
     display: flex;
-    flex-direction: column;
+    align-items: center;
     justify-content: space-evenly;
-    flex: 0;
-    width: 20%;
+    flex-direction: column;
+}
+
+.my-ships img {
+    width: 72px;
+    height: 72px;
 }
 
 .ship {
@@ -187,13 +193,18 @@ a {
 }
 
 .my-div-box, .enemy-div-box {
-    background-color: lightblue;
+    background-color: lightgoldenrodyellow;
     border: 1px solid black;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 200%;
+    border-radius: 2px;
+}
+
+.my-div-box {
+    cursor: auto;
 }
 
 

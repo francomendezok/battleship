@@ -70,8 +70,39 @@ class Gameboard {
             return this.board;
       }
 
+      placeEnemyShips (board) {
+        for (let i = 5; i > 0; i--) {
+            if (i < 2) break;
+            let coordinates = [];
+
+            let num = this.createCoordinates();
+            let [x,y] = num.split(',')
+
+            
+        }
+      }
+
+      createCoordinates () {
+        let num1 = Math.floor(Math.random() * 8); 
+        let num2 = Math.floor(Math.random() * 8); 
+        let result = `${num1},${num2}`;
+
+        if (this.isMoveLegal(result)) return result;
+
+        else {
+            while (!this.isMoveLegal(result)) {
+                num1 = Math.floor(Math.random() * 8); 
+                num2 = Math.floor(Math.random() * 8); 
+                result = `${num1},${num2}`;
+            }
+        }
+        return result;
+    }
+
       receiveAttack (coordinates) {
         let str = `${coordinates}`;
+
+        if (this.board[str].attacked || this.board[str].missed) return;
 
         if (this.board[str].hasShip) {
             this.board[str].attacked = true;
@@ -85,6 +116,8 @@ class Gameboard {
             else {
                 this.board[str].missed = true;
             }
+
+            return true;
       }
 
       getShips () {
