@@ -70,25 +70,26 @@ class Gameboard {
             return this.board;
       }
 
+      isMoveLegal (move) {
+        return !this.board[move].attacked && !this.board[move].missed;
+    }
+
       placeEnemyShips (board) {
-        for (let i = 5; i > 0; i--) {
-            if (i < 2) break;
-            let coordinates = [];
-
-            let num = this.createCoordinates();
-            let [x,y] = num.split(',')
-
-            
-        }
+            let carrier = this.createCoordinates(5);
+            let battleship = this.createCoordinates(4);
+            let cruiser = this.createCoordinates(3);
+            let submarine = this.createCoordinates(3);
+            let destroyer = this.createCoordinates(2);
       }
 
-      createCoordinates () {
+      createCoordinates (size) {
         let num1 = Math.floor(Math.random() * 8); 
         let num2 = Math.floor(Math.random() * 8); 
         let result = `${num1},${num2}`;
+        let coordinates = [];
 
-        if (this.isMoveLegal(result)) return result;
-
+        if (this.isMoveLegal(result)) coordinates.push(result);
+            //check if hasShip, not attacked nor missed //
         else {
             while (!this.isMoveLegal(result)) {
                 num1 = Math.floor(Math.random() * 8); 
@@ -96,7 +97,42 @@ class Gameboard {
                 result = `${num1},${num2}`;
             }
         }
-        return result;
+
+        let split = result.split(',');
+
+        coordinates.push(result);
+
+        for (let i = 0; i < size - 1; i++) {
+            let random = Math.floor(Math.random() * 2); 
+            let key = split[random];
+            
+            let possibilities = [];
+            // 4 get adjacents // 
+            
+        }
+        return coordinates;
+    }
+
+      getAdjacents (size, coordinates) {
+        // 4,4 //
+        let adjacents = []; 
+        let lines = [];
+        let split = coordinates.split(',');
+        
+        for (let j = 0; j < 4; j++) {
+            for (let i = 0; i < size; i++) {
+                let [x,y] = split;
+                let first = `${x}, ${y++}`;
+                let second = `${x}, ${y--}`;
+                let third = `${x++}, ${y}`;
+                let fourth = `${x--}, ${y}`;
+
+                lines.push(first, second, third, fourth);
+            }
+
+        }
+            
+            
     }
 
       receiveAttack (coordinates) {
