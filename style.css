@@ -186,7 +186,7 @@ a {
     cursor: pointer;
 }
 
-.div-box {
+.my-div-box, .enemy-div-box {
     background-color: lightblue;
     border: 1px solid black;
     cursor: pointer;
