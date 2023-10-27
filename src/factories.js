@@ -168,7 +168,6 @@ class Gameboard {
                 }
             }
         }
-        // recorro el gameboard ! //      
         return adjacents;
     }
 
@@ -225,8 +224,8 @@ board.receiveAttack('7,2');
 board.receiveAttack('7,3');
 let arr = board.boardArray();
 
-let adj = board.getAdjacents(arr, 2, '6,7');
-console.log(adj);
+let adj = board.getAdjacents(arr, 4, '6,7');
+
 
 
 // Player Class //

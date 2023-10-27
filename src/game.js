@@ -1,24 +1,18 @@
 import { Ship, Gameboard, Player } from "./factories";
-import { writeName, renderInitalBoards, renderMyBoard, renderEnemyBoard,  clean, renderWin, renderLose, selectShips } from "./render";
+import { writeName, renderInitalBoards, renderMyBoard, renderEnemyBoard,  clean, renderWin, renderLose, selectShips, addBoxesListener } from "./render";
 
 
 function game (name) {
-    renderInitalBoards(name);
-    selectShips();
-    
     let myBoard = new Gameboard();
     let enemyBoard = new Gameboard();
     
     myBoard.createBoard();
-    // myBoard.placeShip(5, ['1,1','1,2','1,3', '1,4', '1,5']);
-    // myBoard.placeShip(4, ['4,4','4,5','4,6', '4,7']);
-    // myBoard.placeShip(3, ['7,1','7,2','7,3']);
-    // myBoard.placeShip(3, ['0,1','0,2','0,3']);
-    myBoard.placeShip(2, ['5,1','5,2']);
-    
     enemyBoard.createBoard();
-    enemyBoard.placeShip(5, ['1,1','1,2','1,3', '1,4', '1,5']);
-    enemyBoard.placeShip(4, ['4,4','4,5','4,6', '4,7']);
+
+    renderInitalBoards(name);
+    selectShips(myBoard);
+    
+    
     
     let player = new Player(myBoard);
     let enemy = new Player(enemyBoard);

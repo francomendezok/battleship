@@ -169,59 +169,63 @@ function renderEnemyBoard (board) {
 
 
 
-function selectShips () {
+function selectShips (myBoard) {
     let ships = document.querySelectorAll('.ship');
     let sizes = [5,4,3,3,2];
 
    for (let i = 0; i < ships.length; i++) {
         let size = ships[i].dataset.size = sizes[i];
-        ships[i].addEventListener('click', () => {
+        ships[i].addEventListener('click', (e) => {
             handleShipClases(ships, ships[i]);
-            // let adjacents = getAdjacents(size); //
-            // dropShips(adjacents);
+            addBoxesListener(myBoard, e.target.dataset.size);
         });
    };
 };
 
-function addBoxesListener () {
+function addBoxesListener (myBoard, size) {
     let boxes = document.querySelectorAll('.my-div-box');
-    let adjacents = [];
+    let array = myBoard.boardArray();
+    
+    if (size) {
+        boxes.forEach(box => {
+            box.addEventListener('mouseover', () => {
+                let boxId = box.id;
+                let split = boxId.split(',');
+                let cut = split[0].split(' ');
 
-    boxes.forEach(box => {
-        box.addEventListener('mouseover', () => {
-            adjacents = getAdjacents(size); // get 4 adjacents //  
-
-            document.addEventListener("keyup", (event) => {
-                if (event.key === "ArrowUp" && adjacents.length) {
-                    printAdjacents(adjacents[0]);
-                } else if (event.key === "ArrowRight" && adjacents.length) {
-                    printAdjacents(adjacents[1]);
-                } else if (event.key === "ArrowDown" && adjacents.length) {
-                    printAdjacents(adjacents[2]);
-                } else if (event.key === "ArrowLeft" && adjacents.length) {
-                    printAdjacents(adjacents[3]);
-                }
+                let coordinates = `${cut[1]},${split[1]}`;
+                
+                let adjacents = myBoard.getAdjacents(array, size, coordinates); // get 4 adjacents //
+                
+                printAdjacents(adjacents[0], size);
+                
+                // document.addEventListener("keydown", (event) => {
+                //     if (event.key === "ArrowUp" && adjacents.length) {
+                //         printAdjacents(adjacents[0], size);
+                //     } else if (event.key === "ArrowRight" && adjacents.length) {
+                //         printAdjacents(adjacents[1], size);
+                //     } else if (event.key === "ArrowDown" && adjacents.length) {
+                //         printAdjacents(adjacents[2], size);
+                //     } else if (event.key === "ArrowLeft" && adjacents.length) {
+                //         printAdjacents(adjacents[3], size);
+                //     }
+                // });
             });
         });
-    });
+    };
+};
 
+function printAdjacents (adjacents, size) {
+    if (adjacents.length !== size) return null;
+
+    adjacents.forEach(adj => {
+        let id = `P ${adj}`;
+        let div = document.getElementById(id);
+            div.addEventListener('mouseover', () => {
+                div.style.background = 'black';
+            })
+    })
 }
-
-function getAdjacents (size, coordinates) {
-    // 4,4 coordinates //
-    // size 4 //
-
-    // recorro el gameboard ! //
-}
-
-
-
-
-
-
-
-
-
 
 
 function handleShipClases (ships, selected) {
@@ -321,4 +325,4 @@ function clean () {
 }
 
 
-export {writeName, clean, renderInitalBoards, renderMyBoard, renderEnemyBoard, renderWin, renderLose, selectShips};
+export {writeName, clean, renderInitalBoards, renderMyBoard, renderEnemyBoard, renderWin, renderLose, selectShips, addBoxesListener};
