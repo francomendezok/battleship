@@ -186,6 +186,8 @@ a {
 .my-ships img {
     width: 72px;
     height: 72px;
+    margin: 0;
+    padding: 0;
 }
 
 .ship {
@@ -204,7 +206,7 @@ a {
 }
 
 .my-div-box {
-    cursor: auto;
+    cursor: pointer;
 }
 
 
@@ -216,4 +218,18 @@ a {
     justify-content: space-evenly;
 }
 
+@keyframes parpadeo {
+    0% { border-color: yellow; }
+    50% { border-color: transparent; }
+    100% { border-color: yellow; }
+  }
+  
+  .ship-selected {
+    border: 5px solid red;
+    border-radius: 10px;
+    animation: parpadeo 1.2s infinite;
+    margin: 0;
+    padding: 0;
+    transform: scale(1.5);
+}
   
