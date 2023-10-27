@@ -166,36 +166,103 @@ function renderEnemyBoard (board) {
     }
 }
 
-function dragAndDrop () {
-    let ships = document.querySelectorAll('.ship');
-    let boxes = document.querySelectorAll('.my-div-box');
 
-    ships.forEach(ship => {
-        ship.draggable = true;
-    
-        ship.addEventListener('dragstart', (e) => {
-            let selected = e.target;
-            boxes.forEach(box => {
-                box.addEventListener('dragover', () => {
-                    box.style.background = 'red';
-                });
-                box.addEventListener('dragend', (e) => {
-                    // let boxId = e.target.id;
-                    // let myBox = document.getElementById(boxId);
-                    // console.log(e.target);
-                    // myBox.appendChild(selected);
-                    // selected = null;
-                });
-                box.addEventListener('drop', (e) => {
-                    // let boxId = e.target.id;
-                    // let myBox = document.getElementById(boxId);
-                    console.log(e.target);
-                    // myBox.appendChild(selected);
-                    // selected = null;
-                });
+
+
+function selectShips () {
+    let ships = document.querySelectorAll('.ship');
+    let sizes = [5,4,3,3,2];
+
+   for (let i = 0; i < ships.length; i++) {
+        let size = ships[i].dataset.size = sizes[i];
+        ships[i].addEventListener('click', () => {
+            handleShipClases(ships, ships[i]);
+            // let adjacents = getAdjacents(size); //
+            // dropShips(adjacents);
+        });
+   };
+};
+
+function addBoxesListener () {
+    let boxes = document.querySelectorAll('.my-div-box');
+    let adjacents = [];
+
+    boxes.forEach(box => {
+        box.addEventListener('mouseover', () => {
+            adjacents = getAdjacents(size); // get 4 adjacents //  
+
+            document.addEventListener("keyup", (event) => {
+                if (event.key === "ArrowUp" && adjacents.length) {
+                    printAdjacents(adjacents[0]);
+                } else if (event.key === "ArrowRight" && adjacents.length) {
+                    printAdjacents(adjacents[1]);
+                } else if (event.key === "ArrowDown" && adjacents.length) {
+                    printAdjacents(adjacents[2]);
+                } else if (event.key === "ArrowLeft" && adjacents.length) {
+                    printAdjacents(adjacents[3]);
+                }
             });
         });
     });
+
+}
+
+function getAdjacents (size, coordinates) {
+    // 4,4 coordinates //
+    // size 4 //
+
+    // recorro el gameboard ! //
+}
+
+
+
+
+
+
+
+
+
+
+
+function handleShipClases (ships, selected) {
+    ships.forEach(ship => {
+        if (ship.classList.contains('ship-selected')) {
+            ship.classList.remove('ship-selected');
+        }
+        if (ship === selected) ship.classList.add('ship-selected');
+    })
+}
+
+function dropShips (adjacents) {
+    // 4 adjacents // if key up show adjacents[0], if key down show adjacents[2] and so on // 
+
+
+    let boxes = document.querySelectorAll('.my-div-box');
+    
+    boxes.forEach(div => {
+        div.addEventListener('mouseover', (e) => {
+            let boxId = div.id;
+            // 4,4 //
+            let split = boxId.split(',');
+            let adjacents = [boxId];
+            let j = split[1];
+
+            for (let i = 0; i < size; i++) {
+                j++;
+                if (j > 7) break;
+                adjacents.push(`${split[0]}, ${split[j]}`);
+            }
+            adjacents.forEach(adj => {
+                let sides = document.getElementById(adj);
+                sides.style.background = 'black';
+            })
+            // div.style.background = 'black';
+        })
+
+        div.addEventListener('mouseout', (e) => {
+            div.style.background = 'lightgoldenrodyellow';
+        })
+    })
 }
 
 function renderWin () {
@@ -254,4 +321,4 @@ function clean () {
 }
 
 
-export {writeName, clean, renderInitalBoards, renderMyBoard, renderEnemyBoard, renderWin, renderLose};
+export {writeName, clean, renderInitalBoards, renderMyBoard, renderEnemyBoard, renderWin, renderLose, selectShips};

@@ -1,9 +1,11 @@
 import { Ship, Gameboard, Player } from "./factories";
-import { writeName, renderInitalBoards, renderMyBoard, renderEnemyBoard,  clean, renderWin, renderLose } from "./render";
+import { writeName, renderInitalBoards, renderMyBoard, renderEnemyBoard,  clean, renderWin, renderLose, selectShips } from "./render";
 
 
 function game (name) {
     renderInitalBoards(name);
+    selectShips();
+    
     let myBoard = new Gameboard();
     let enemyBoard = new Gameboard();
     

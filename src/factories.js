@@ -31,7 +31,7 @@ class Gameboard {
         for (let i = 0; i < size; i += 1) {
           for (let j = 0; j < size; j += 1) {
             const coordinate = `${i},${j}`;
-            this.board[coordinate] = { attacked: false, missed: false, hasShip: false, ship: [] };
+            this.board[coordinate] = { coordinates: coordinate, attacked: false, missed: false, hasShip: false, ship: [] };
         }
         }
         return this.board;
@@ -113,26 +113,63 @@ class Gameboard {
         return coordinates;
     }
 
-      getAdjacents (size, coordinates) {
-        // 4,4 //
-        let adjacents = []; 
-        let lines = [];
-        let split = coordinates.split(',');
-        
-        for (let j = 0; j < 4; j++) {
-            for (let i = 0; i < size; i++) {
-                let [x,y] = split;
-                let first = `${x}, ${y++}`;
-                let second = `${x}, ${y--}`;
-                let third = `${x++}, ${y}`;
-                let fourth = `${x--}, ${y}`;
+      getAdjacents (arrayBoard, size, coordinates) {
+        let adjacents = [[],[],[],[]];
+        let up = 8;
+        let right = 1;
+        let down = 8;
+        let left = 1;
+        let index = 0;
 
-                lines.push(first, second, third, fourth);
+        // get index //
+        for (let j = 0; j < arrayBoard.length; j++) {
+            if (arrayBoard[j].coordinates === coordinates) {
+                index = j;
+                break;
             }
-
         }
-            
-            
+
+        for (let i = 0; i < size; i++) {
+            // 4 adjacents // 
+            if (arrayBoard[index - up]) {
+                let split = coordinates.split(',');
+                let place = arrayBoard[index - up].coordinates;
+                let placeSplit = place.split(',');
+                if (place && place.includes(split[1])) {
+                    adjacents[0].push(arrayBoard[index - up].coordinates);
+                    up += 8;
+                }
+            }
+            if (arrayBoard[index + right]) {
+                let split = coordinates.split(',');
+                let place = arrayBoard[index + right].coordinates;
+                let placeSplit = place.split(',');
+                if (place && placeSplit[0] === split[0]) {
+                    adjacents[1].push(arrayBoard[index + right].coordinates);
+                    right++;
+                }
+            }
+            if (arrayBoard[index + down]) {
+                let split = coordinates.split(',');
+                let place = arrayBoard[index + down].coordinates;
+                let placeSplit = place.split(',');
+                if (place && place.includes(split[1])) {
+                    adjacents[2].push(arrayBoard[index + down].coordinates);
+                    down += 8;
+                }
+            }
+            if (arrayBoard[index - left]) {
+                let split = coordinates.split(',');
+                let place = arrayBoard[index - left].coordinates;
+                let placeSplit = place.split(',');
+                if (place && placeSplit[0] === split[0]) {
+                    adjacents[3].push(arrayBoard[index - left].coordinates);
+                    left++;
+                }
+            }
+        }
+        // recorro el gameboard ! //      
+        return adjacents;
     }
 
       receiveAttack (coordinates) {
@@ -163,6 +200,16 @@ class Gameboard {
       allSunk () {
         return this.ships.every(ship => ship.sunk === true);
       }
+
+      boardArray () {
+        const obj = this.board;
+        const array = [];
+
+        for (let key in obj) {
+            array.push(obj[key]);
+          }
+          return array;
+      }
 }
 
 
@@ -176,6 +223,10 @@ board.receiveAttack('0,3');
 board.receiveAttack('7,1');
 board.receiveAttack('7,2');
 board.receiveAttack('7,3');
+let arr = board.boardArray();
+
+let adj = board.getAdjacents(arr, 2, '6,7');
+console.log(adj);
 
 
 // Player Class //
