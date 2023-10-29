@@ -166,26 +166,27 @@ function renderEnemyBoard (board) {
     }
 }
 
-
-
-
 function selectShips (myBoard) {
     let ships = document.querySelectorAll('.ship');
     let sizes = [5,4,3,3,2];
 
    for (let i = 0; i < ships.length; i++) {
-        let size = ships[i].dataset.size = sizes[i];
-        ships[i].addEventListener('click', (e) => {
+       let size = ships[i].dataset.size = sizes[i];
+       
+       ships[i].addEventListener('click', () => {
+            addBoxesListener(myBoard, size);
             handleShipClases(ships, ships[i]);
-            addBoxesListener(myBoard, e.target.dataset.size);
         });
+        if (i === 0) ships[i].click();
    };
 };
+
+
 
 function addBoxesListener (myBoard, size) {
     let boxes = document.querySelectorAll('.my-div-box');
     let array = myBoard.boardArray();
-    
+
     if (size) {
         boxes.forEach(box => {
             box.addEventListener('mouseover', () => {
@@ -195,36 +196,96 @@ function addBoxesListener (myBoard, size) {
 
                 let coordinates = `${cut[1]},${split[1]}`;
                 
-                let adjacents = myBoard.getAdjacents(array, size, coordinates); // get 4 adjacents //
-                
-                printAdjacents(adjacents[0], size);
-                
-                // document.addEventListener("keydown", (event) => {
-                //     if (event.key === "ArrowUp" && adjacents.length) {
-                //         printAdjacents(adjacents[0], size);
-                //     } else if (event.key === "ArrowRight" && adjacents.length) {
-                //         printAdjacents(adjacents[1], size);
-                //     } else if (event.key === "ArrowDown" && adjacents.length) {
-                //         printAdjacents(adjacents[2], size);
-                //     } else if (event.key === "ArrowLeft" && adjacents.length) {
-                //         printAdjacents(adjacents[3], size);
-                //     }
-                // });
+                let adjacents = myBoard.getAdjacents(array, size - 1, coordinates); // get 4 adjacents //
+
+                adjacents.forEach(adj => {
+                    adj.forEach(set => {
+                        let id = `P ${set}`;
+                        let div = document.getElementById(id);
+                        // fix bug render sizes//
+                        // div.style.background = 'black';
+                        // div.style.border = '1px solid white';
+                    });
+                });
             });
+            box.addEventListener('mouseout', () => {
+                let boxId = box.id;
+                let split = boxId.split(',');
+                let cut = split[0].split(' ');
+
+                let coordinates = `${cut[1]},${split[1]}`;
+                
+                let adjacents = myBoard.getAdjacents(array, size - 1, coordinates); // get 4 adjacents //
+                
+                adjacents.forEach(adj => {
+                    adj.forEach(set => {
+                        let id = `P ${set}`;
+                        let div = document.getElementById(id);
+                        box.innerHTML = ' ';
+                        div.innerHTML = ' ';
+                        
+                        // div.style.background = 'lightgoldenrodyellow';
+                        // div.style.border = '1px solid black';
+
+                    });
+                });
+            })
         });
-    };
+    } else {
+        alert('No size'); }
 };
 
-function printAdjacents (adjacents, size) {
-    if (adjacents.length !== size) return null;
+function removeBoxesListener (myBoard, size) {
+    let boxes = document.querySelectorAll('.my-div-box');
+    boxes.forEach(box => {
+        box.removeEventListener('mouseover', () => {
+            let boxId = box.id;
+            let split = boxId.split(',');
+            let cut = split[0].split(' ');
 
-    adjacents.forEach(adj => {
-        let id = `P ${adj}`;
-        let div = document.getElementById(id);
-            div.addEventListener('mouseover', () => {
-                div.style.background = 'black';
-            })
-    })
+            let coordinates = `${cut[1]},${split[1]}`;
+            
+            let adjacents = myBoard.getAdjacents(array, size, coordinates); // get 4 adjacents //
+            
+            adjacents.forEach(adj => {
+                adj.forEach(set => {
+                    let id = `P ${set}`;
+                    let div = document.getElementById(id);
+                    div.style.background = 'black';
+                });
+            });
+        });
+        box.removeEventListener('mouseout', () => {
+            let boxId = box.id;
+            let split = boxId.split(',');
+            let cut = split[0].split(' ');
+
+            let coordinates = `${cut[1]},${split[1]}`;
+            
+            let adjacents = myBoard.getAdjacents(array, size, coordinates); // get 4 adjacents //
+            
+            adjacents.forEach(adj => {
+                adj.forEach(set => {
+                    let id = `P ${set}`;
+                    let div = document.getElementById(id);
+                    div.style.background = 'lightgoldenrodyellow';
+                });
+            });
+        })
+    });
+};
+
+
+function printAdjacents (adjacents, size) {
+    console.log(adjacents);
+    // if (adjacents.length !== size) return null;
+
+    // adjacents.forEach(adj => {
+    //     let id = `P ${adj}`;
+    //     let div = document.getElementById(id);
+        
+    //     div.style.background = 'black';
+    // })
 }
 
 
