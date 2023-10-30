@@ -96,7 +96,6 @@ class Gameboard {
             let ships = [carrier, battleship, cruiser, submarine, destroyer];
             let sizes = [5,4,3,3,2];
             let filtered = [];
-            let ubication = [];
 
             for (let i = 0; i < ships.length; i++) {
                 let temp = ships[i].filter(pos => pos.length === sizes[i]);
@@ -104,26 +103,17 @@ class Gameboard {
             }
 
 
-            filtered.forEach(setOfCoordinates => {
-                // console.log(setOfCoordinates[0].length, setOfCoordinates[0]);
+
+            filtered.forEach(setOfCoordinates => { 
                 this.placeShip(setOfCoordinates[0].length, setOfCoordinates[0]);
-                    // let affirmative = pos.every(position => this.hasShip(position) === false); // no ships in the coordinates // 
-                    // if (affirmative) {
-                    //     ubication.push([pos]);
-                    //     this.placeShip(pos.length, pos);
-                    // }
-                    // else {
-                    //     let adj;
-                    //     while (!affirmative) {
-                    //         let coordinate = this.createCoordinates();
-                    //         adj = this.getAdjacents(array, pos.length, coordinate);
-                    //         affirmative = adj[index].every(position => this.hasShip(position) === false);
-                    //     }
-                    //     ubication.push(pos.length, pos);
-                    //     this.placeShip(pos.length, pos);
-                    // }    
-                });
-                return this.board;
+                
+                // setOfCoordinates.forEach(coordinates => {
+                //     // let affirmative = coordinates.every(position => !this.hasShip(position));
+                //     this.placeShip(coordinates.length, coordinates);
+                //     // coordinates.forEach(position => {
+                //     // })
+                // });
+            });  
       };
 
       createCoordinates () {
