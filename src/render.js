@@ -169,13 +169,15 @@ function renderEnemyBoard (board) {
 function selectShips (myBoard) {
     let ships = document.querySelectorAll('.ship');
     let sizes = [5,4,3,3,2];
+    let boxes = document.querySelectorAll('.my-div-box');
+
 
    for (let i = 0; i < ships.length; i++) {
        let size = ships[i].dataset.size = sizes[i];
        
        ships[i].addEventListener('click', () => {
-            addBoxesListener(myBoard, size);
-            handleShipClases(ships, ships[i]);
+           addBoxesListener(myBoard, size);
+           handleShipClases(ships, ships[i]);
         });
         if (i === 0) ships[i].click();
    };
@@ -199,13 +201,18 @@ function addBoxesListener (myBoard, size) {
                 let adjacents = myBoard.getAdjacents(array, size - 1, coordinates); // get 4 adjacents //
 
                 adjacents.forEach(adj => {
-                    adj.forEach(set => {
-                        let id = `P ${set}`;
+                    for (let i = 0; i < adj.length; i++) {
+                        let id = `P ${adj[i]}`;
                         let div = document.getElementById(id);
-                        // fix bug render sizes//
-                        // div.style.background = 'black';
-                        // div.style.border = '1px solid white';
-                    });
+                        div.classList.add('over');
+                    }
+                    // adj.forEach(set => {
+                    //     let id = `P ${set}`;
+                    //     let div = document.getElementById(id);
+                    //     // fix bug render sizes//
+                    //     div.style.background = 'black';
+                    //     div.style.border = '1px solid white';
+                    // });
                 });
             });
             box.addEventListener('mouseout', () => {
@@ -221,12 +228,7 @@ function addBoxesListener (myBoard, size) {
                     adj.forEach(set => {
                         let id = `P ${set}`;
                         let div = document.getElementById(id);
-                        box.innerHTML = ' ';
-                        div.innerHTML = ' ';
-                        
-                        // div.style.background = 'lightgoldenrodyellow';
-                        // div.style.border = '1px solid black';
-
+                        div.classList.remove('over');
                     });
                 });
             })
