@@ -63,54 +63,84 @@ class Gameboard {
                     this.board[coordinates[i]].ship.push(coordinates);
                     this.board[coordinates[i]].hasShip = true;
                 }
-                else if (!this.isValid(coordinates[i])) return 'No Valid';
+                else return `There is a Ship in ${coordinates[i]}`;
             }
-        ship.addCoordinates(coordinates);
-        this.addShip(ship);
+            ship.addCoordinates(coordinates);
+            this.addShip(ship);
             return this.board;
       }
 
       isMoveLegal (move) {
         return !this.board[move].attacked && !this.board[move].missed;
     }
+        
+    hasShip (coordinate) {
+            return this.board[coordinate].hasShip;
+        }
 
-      placeEnemyShips (board) {
-            let carrier = this.createCoordinates(5);
-            let battleship = this.createCoordinates(4);
-            let cruiser = this.createCoordinates(3);
-            let submarine = this.createCoordinates(3);
-            let destroyer = this.createCoordinates(2);
-      }
+      placeEnemyShips () {
+            let coordinateCarrier = this.createCoordinates();
+            let coordinateBattleship = this.createCoordinates();
+            let coordinateCruiser = this.createCoordinates();
+            let coordinateSubmarine = this.createCoordinates();
+            let coordinateDestroyer = this.createCoordinates();
 
-      createCoordinates (size) {
+            let array = this.boardArray();
+
+            let carrier = this.getAdjacents(array, 5, coordinateCarrier);
+            let battleship = this.getAdjacents(array, 4, coordinateBattleship);
+            let cruiser = this.getAdjacents(array, 3, coordinateCruiser);
+            let submarine = this.getAdjacents(array, 3, coordinateSubmarine);
+            let destroyer = this.getAdjacents(array, 2, coordinateDestroyer);
+
+            let ships = [carrier, battleship, cruiser, submarine, destroyer];
+            let sizes = [5,4,3,3,2];
+            let filtered = [];
+            let ubication = [];
+
+            for (let i = 0; i < ships.length; i++) {
+                let temp = ships[i].filter(pos => pos.length === sizes[i]);
+                filtered.push(temp);
+            }
+
+
+            filtered.forEach(setOfCoordinates => {
+                // console.log(setOfCoordinates[0].length, setOfCoordinates[0]);
+                this.placeShip(setOfCoordinates[0].length, setOfCoordinates[0]);
+                    // let affirmative = pos.every(position => this.hasShip(position) === false); // no ships in the coordinates // 
+                    // if (affirmative) {
+                    //     ubication.push([pos]);
+                    //     this.placeShip(pos.length, pos);
+                    // }
+                    // else {
+                    //     let adj;
+                    //     while (!affirmative) {
+                    //         let coordinate = this.createCoordinates();
+                    //         adj = this.getAdjacents(array, pos.length, coordinate);
+                    //         affirmative = adj[index].every(position => this.hasShip(position) === false);
+                    //     }
+                    //     ubication.push(pos.length, pos);
+                    //     this.placeShip(pos.length, pos);
+                    // }    
+                });
+                return this.board;
+      };
+
+      createCoordinates () {
         let num1 = Math.floor(Math.random() * 8); 
         let num2 = Math.floor(Math.random() * 8); 
         let result = `${num1},${num2}`;
-        let coordinates = [];
 
-        if (this.isMoveLegal(result)) coordinates.push(result);
-            //check if hasShip, not attacked nor missed //
+        if (!this.hasShip(result)) return result;
+
         else {
-            while (!this.isMoveLegal(result)) {
+            while (this.hasShip(result)) {
                 num1 = Math.floor(Math.random() * 8); 
                 num2 = Math.floor(Math.random() * 8); 
                 result = `${num1},${num2}`;
             }
+        return result;
         }
-
-        let split = result.split(',');
-
-        coordinates.push(result);
-
-        for (let i = 0; i < size - 1; i++) {
-            let random = Math.floor(Math.random() * 2); 
-            let key = split[random];
-            
-            let possibilities = [];
-            // 4 get adjacents // 
-            
-        }
-        return coordinates;
     }
 
       getAdjacents (arrayBoard, size, coordinates) {
@@ -212,19 +242,13 @@ class Gameboard {
 }
 
 
-let board = new Gameboard();
-board.createBoard();
-board.placeShip(3, ['7,1','7,2','7,3']);
-board.placeShip(3, ['0,1', '0,2','0,3'])
-board.receiveAttack('0,1');
-board.receiveAttack('0,2');
-board.receiveAttack('0,3');
-board.receiveAttack('7,1');
-board.receiveAttack('7,2');
-board.receiveAttack('7,3');
-let arr = board.boardArray();
+let enemyBoard = new Gameboard();
+enemyBoard.createBoard();
 
-let adj = board.getAdjacents(arr, 4, '6,7');
+
+let result = enemyBoard.placeEnemyShips();
+console.log(result);
+
 
 
 
@@ -256,8 +280,6 @@ class Player {
         return result;
     }
 }
-
-const play = new Player(board);
 
 
 module.exports = {Ship, Gameboard, Player};

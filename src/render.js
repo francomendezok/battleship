@@ -163,6 +163,10 @@ function renderEnemyBoard (board) {
             box.innerHTML = '💦';
             box.style.background = 'lightblue';
         }
+        if (board.board[num].hasShip) {
+            box.innerHTML = '🚢';
+            box.style.background = 'lightblue';
+        }
     }
 }
 
@@ -182,7 +186,6 @@ function selectShips (myBoard) {
         if (i === 0) ships[i].click();
    };
 };
-
 
 
 function addBoxesListener (myBoard, size) {
