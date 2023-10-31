@@ -84,8 +84,11 @@ function renderPlaceShips (name) {
           const div = document.createElement('div');
           div.classList.add('my-div-box');
           div.id = `${coordinate}`;
-          if (i === 7 || j === 7) {
-            div.dataset.notAllowed = true;
+          if (j === 7) {
+            div.dataset.xNotAllowed = true;
+          }
+          if (i === 7) {
+            div.dataset.yNotAllowed = true;
           }
 
           div.addEventListener('mouseover', () => {
@@ -101,83 +104,62 @@ function renderPlaceShips (name) {
             let adjacents = board.getAdjacents(board, size, div.id);
 
             if (axisText === 'X') {
-                if (adjacents[0].length < size) {
-                    div.style.background = 'red';
-                    div.style.cursor = 'not-allowed';
-                } // fix bug when size is less //
-                let has = false;
-                if (div.dataset.notAllowed) {
-                    div.style.background = 'red';
-                    div.style.cursor = 'not-allowed'; 
-                }
-                if (board.hasShip(div.id)) {
-                    div.style.background = 'red';
-                    div.style.cursor = 'not-allowed'
-                    has = true;
-                }
+                // BLACK //
                 let adjWithShip = adjacents[0].some(x => board.hasShip(x));
-                if (adjWithShip) {
+                if (!div.dataset.xNotAllowed || !adjWithShip  || !adjacents[0].length < size) {
                     adjacents[0].forEach(position => {
+                        let ubi = document.getElementById(position);
+                        div.style.background = 'black';
+                        ubi.style.background = 'black';
+                        div.style.cursor = 'crosshair'; 
+                    });
+                };
+
+                // RED //
+                if (board.hasShip(div.id) || div.dataset.xNotAllowed || adjWithShip  || adjacents[0].length < size) {
+                    if (div.dataset.xNotAllowed) {
+                        div.style.background = 'red';
+                        div.style.cursor = 'not-allowed';
+                    }
+                    else {
+                        adjacents[0].forEach(position => {
                             let ubi = document.getElementById(position);
                             div.style.background = 'red';
                             ubi.style.background = 'red';
                             div.style.cursor = 'not-allowed';
-                    })
-                }
-                else {
-                    adjacents[0].forEach(position => {
-                            
-    
-                            if (has) {
-                                let ubi = document.getElementById(position);
-                                ubi.style.background = 'red';
-                                div.style.cursor = 'not-allowed'; 
-                            }
-                                else {
-                                    let ubi = document.getElementById(position);
-                                    div.style.background = 'black';
-                                    ubi.style.background = 'black';
-                                    div.style.cursor = 'crosshair'; 
-                                }
-                    });
-                }
+                        })
+                    }
+                };   
             };
 
             if (axisText === 'Y') {
-                let has = false;
-                if (div.dataset.notAllowed) {
-                    div.style.background = 'red';
-                    div.style.cursor = 'not-allowed'; 
-                }
-                if (board.hasShip(div.id)) {
-                    div.style.background = 'red';
-                    div.style.cursor = 'not-allowed'
-                    has = true;
-                }
-                adjacents[1].forEach(position => {
-                    if (adjacents[1].length < size) {
-                        div.style.background = 'red';
-                        div.style.cursor = 'not-allowed'; 
-                    }
-                    if (has) {
+                // BLACK //
+                let adjWithShip = adjacents[1].some(x => board.hasShip(x));
+                if (!div.dataset.yNotAllowed || !adjWithShip  || !adjacents[1].length < size) {
+                    adjacents[1].forEach(position => {
                         let ubi = document.getElementById(position);
+                        div.style.background = 'black';
+                        ubi.style.background = 'black';
+                        div.style.cursor = 'crosshair'; 
+                    });
+                };
+
+               // RED //
+               if (board.hasShip(div.id) || div.dataset.yNotAllowed || adjWithShip  || adjacents[1].length < size) {
+                if (div.dataset.yNotAllowed) {
+                    div.style.background = 'red';
+                    div.style.cursor = 'not-allowed';
+                }
+                else {
+                    adjacents[1].forEach(position => {
+                        let ubi = document.getElementById(position);
+                        div.style.background = 'red';
                         ubi.style.background = 'red';
-                        div.style.cursor = 'not-allowed'; 
-                    }
-                        else {
-                            let ubi = document.getElementById(position);
-                            div.style.background = 'black';
-                            ubi.style.background = 'black';
-                            div.style.cursor = 'crosshair'; 
-                        }
-                });
-            };
-
-           
-
-            // check if adjacents hasShip //
-            // if so, click pointer cross, div background red // 
-
+                        div.style.cursor = 'not-allowed';
+                    })
+                }
+            };  
+            }; 
           });
 
           div.addEventListener('mouseleave', () => {
@@ -193,7 +175,7 @@ function renderPlaceShips (name) {
             let adjacents = board.getAdjacents(board, size, div.id);
 
             if (axisText === 'X') {
-                if (div.dataset.notAllowed) {
+                if (div.dataset.xNotAllowed) {
                     div.style.background = 'lightgoldenrodyellow';
                     div.style.cursor = 'crosshair'; 
                 }
@@ -205,7 +187,7 @@ function renderPlaceShips (name) {
             };
 
             if (axisText === 'Y') {
-                if (div.dataset.notAllowed) {
+                if (div.dataset.yNotAllowed) {
                     div.style.background = 'lightgoldenrodyellow';
                     div.style.cursor = 'crosshair'; 
                 }
@@ -245,10 +227,9 @@ function renderPlaceShips (name) {
     mySection.appendChild(myNameBox);
     mySection.appendChild(myGameSection);
     
-    board.placeShip(3, ['4,4', '5,4', '6,4']);
-    console.log(board);
-    renderMyBoard(board);
+    board.placeShip(3, ['0,1', '0,2', '0,3']);
     main.appendChild(mySection);
+    renderMyBoard(board);
 
     // IF ANY OF ADJACENTS HAS SHIP MARKED WITH RED AND CROSS // 
     
@@ -321,11 +302,8 @@ function renderInitalBoards (name) {
 
 function renderMyBoard (board) {
     const boxes = document.querySelectorAll('.my-div-box');
-
-    for (const box of boxes) {
-        let coordinates = box.id;
-         
-        
+    boxes.forEach(box => {
+       let coordinates = box.id;
         if (board.board[coordinates].hasShip) {
             box.style.background = 'green';
         }
@@ -337,8 +315,9 @@ function renderMyBoard (board) {
             box.innerHTML = '💦';
             box.style.background = 'lightblue';
         }
-    }
-}
+    });
+};
+
 
 function renderEnemyBoard (board) {
     const boxes = document.querySelectorAll('.enemy-div-box');
