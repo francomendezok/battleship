@@ -59,15 +59,15 @@ class Gameboard {
 
         const ship = new Ship(size);
             for (let i = 0; i < coordinates.length; i++) {
-                if (this.isValid(coordinates[i])) {
+                if (!this.hasShip(coordinates[i])) {
                     this.board[coordinates[i]].ship.push(coordinates);
                     this.board[coordinates[i]].hasShip = true;
                 }
-                else return `There is a Ship in ${coordinates[i]}`;
+                else return false;
             }
             ship.addCoordinates(coordinates);
             this.addShip(ship);
-            return this.board;
+            return true;
       }
 
       isMoveLegal (move) {
@@ -133,12 +133,13 @@ class Gameboard {
         }
     }
 
-      getAdjacents (arrayBoard, size, coordinates) {
-        let adjacents = [[],[],[],[]];
-        let up = 8;
+      getAdjacents (board, size, coordinates) {
+        let arrayBoard = board.boardArray();
+        let adjacents = [[],[]];
+        // let up = 8;
         let right = 1;
         let down = 8;
-        let left = 1;
+        // let left = 1;
         let index = 0;
 
         // get index //
@@ -150,22 +151,22 @@ class Gameboard {
         }
 
         for (let i = 0; i < size; i++) {
-            // 4 adjacents // 
-            if (arrayBoard[index - up]) {
-                let split = coordinates.split(',');
-                let place = arrayBoard[index - up].coordinates;
-                let placeSplit = place.split(',');
-                if (place && place.includes(split[1])) {
-                    adjacents[0].push(arrayBoard[index - up].coordinates);
-                    up += 8;
-                }
-            }
+            // 2 adjacents // 
+            // if (arrayBoard[index - up]) {
+            //     let split = coordinates.split(',');
+            //     let place = arrayBoard[index - up].coordinates;
+            //     let placeSplit = place.split(',');
+            //     if (place && place.includes(split[1])) {
+            //         adjacents[0].push(arrayBoard[index - up].coordinates);
+            //         up += 8;
+            //     }
+            // }
             if (arrayBoard[index + right]) {
                 let split = coordinates.split(',');
                 let place = arrayBoard[index + right].coordinates;
                 let placeSplit = place.split(',');
                 if (place && placeSplit[0] === split[0]) {
-                    adjacents[1].push(arrayBoard[index + right].coordinates);
+                    adjacents[0].push(arrayBoard[index + right].coordinates);
                     right++;
                 }
             }
@@ -174,21 +175,25 @@ class Gameboard {
                 let place = arrayBoard[index + down].coordinates;
                 let placeSplit = place.split(',');
                 if (place && place.includes(split[1])) {
-                    adjacents[2].push(arrayBoard[index + down].coordinates);
+                    adjacents[1].push(arrayBoard[index + down].coordinates);
                     down += 8;
                 }
             }
-            if (arrayBoard[index - left]) {
-                let split = coordinates.split(',');
-                let place = arrayBoard[index - left].coordinates;
-                let placeSplit = place.split(',');
-                if (place && placeSplit[0] === split[0]) {
-                    adjacents[3].push(arrayBoard[index - left].coordinates);
-                    left++;
-                }
-            }
+            // if (arrayBoard[index - left]) {
+            //     let split = coordinates.split(',');
+            //     let place = arrayBoard[index - left].coordinates;
+            //     let placeSplit = place.split(',');
+            //     if (place && placeSplit[0] === split[0]) {
+            //         adjacents[3].push(arrayBoard[index - left].coordinates);
+            //         left++;
+            //     }
+            // }
         }
         return adjacents;
+    }
+
+    hasAllShipsPlaced () {
+        return this.ships.length === 5;
     }
 
       receiveAttack (coordinates) {
@@ -230,17 +235,6 @@ class Gameboard {
           return array;
       }
 }
-
-
-let enemyBoard = new Gameboard();
-enemyBoard.createBoard();
-
-
-let result = enemyBoard.placeEnemyShips();
-console.log(result);
-
-
-
 
 // Player Class //
 class Player {
