@@ -180,9 +180,14 @@ function renderPlaceShips (name) {
                     div.style.cursor = 'crosshair'; 
                 }
                 adjacents[0].forEach(position => {
-                        let ubi = document.getElementById(position);
-                        div.style.background = 'lightgoldenrodyellow';
-                        ubi.style.background = 'lightgoldenrodyellow';
+                    let ubi = document.getElementById(position);
+                    div.style.background = 'lightgoldenrodyellow';
+                    ubi.style.background = 'lightgoldenrodyellow';
+
+                    if (board.hasShip(ubi.id)) {
+                        div.style.background = 'green';
+                        ubi.style.background = 'green';
+                    }
                 });
             };
 
@@ -201,7 +206,26 @@ function renderPlaceShips (name) {
           })
 
           div.addEventListener('click', () => {
-           
+            // let title = document.querySelector('.my-name');
+            // let name = title.textContent;
+            // let split = name.split(' ');
+            // let ship = split[split.length -1];
+            // let index = ships.indexOf(ship);
+            // let size = sizes[index];
+            // let axis = document.querySelector('.axis');
+            // let axisText = axis.textContent.split(' ')[1];
+
+            // let adjacents = board.getAdjacents(board, size, div.id);
+
+            // if (axisText === 'X') {
+            //     let placed = board.placeShip(size, adjacents[0]);
+            // }
+
+            // if (axisText === 'Y') {
+            //     let placed = board.placeShip(size, adjacents[a]);
+            // }
+            
+            // renderMyBoard(board);
             // if (place ship is those coordinates === true) {
                 pos += 1;
                 if (pos === ships.length) {
@@ -315,6 +339,9 @@ function renderMyBoard (board) {
             box.innerHTML = '💦';
             box.style.background = 'lightblue';
         }
+        // else if (!board.board[coordinates].missed && !board.board[coordinates].attacked && board.board[coordinates].hasShip) {
+        //     box.style.background = 'lightgoldenrodyellow';
+        // }
     });
 };
 
