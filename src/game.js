@@ -1,24 +1,21 @@
 import { Ship, Gameboard, Player } from "./factories";
-import { writeName, renderInitalBoards, renderMyBoard, renderEnemyBoard,  clean, renderWin, renderLose, selectShips, addBoxesListener } from "./render";
+import { writeName, renderInitalBoards, renderMyBoard, renderEnemyBoard,  clean, renderWin, renderLose } from "./render";
 
 
-function game (name) {
-    let myBoard = new Gameboard();
+function game (board) {
     let enemyBoard = new Gameboard();
-    
-    myBoard.createBoard();
-    enemyBoard.createBoard();
-
-    renderInitalBoards(name);
-    selectShips(myBoard);
-    
-    
-    
+    let myBoard = board;
     let player = new Player(myBoard);
+
+    enemyBoard.createBoard();
     let enemy = new Player(enemyBoard);
 
-    renderMyBoard(player.gameboard);
-    renderEnemyBoard(enemy.gameboard);
+    
+    // enemyBoard.placeEnemyShips(enemyBoard);
+
+    
+    renderMyBoard(board);
+    renderEnemyBoard(enemyBoard);
 
     const enemyBoxes = document.querySelectorAll('.enemy-div-box');
     let eBoxes = [...enemyBoxes];
@@ -44,17 +41,17 @@ function game (name) {
                   }, 1000); 
                   
     
-                let mySunk = myBoard.allSunk();
-                let enemySunk = enemyBoard.allSunk();
+                // let mySunk = myBoard.allSunk();
+                // let enemySunk = enemyBoard.allSunk();
     
-                if (mySunk) {
-                    clean();
-                    renderLose();
-                };
-                if (enemySunk) {
-                    clean();
-                    renderWin();
-                };
+                // if (mySunk) {
+                //     clean();
+                //     renderLose();
+                // };
+                // if (enemySunk) {
+                //     clean();
+                //     renderWin();
+                // };
             }
 
         });

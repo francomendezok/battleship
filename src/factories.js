@@ -55,70 +55,91 @@ class Gameboard {
       }
 
       placeShip (size, coordinates) {
-        if (size !== coordinates.length) return 'Size and coordinates length should be equal';
+        if (size !== coordinates.length) return false;
 
         const ship = new Ship(size);
             for (let i = 0; i < coordinates.length; i++) {
-                if (this.isValid(coordinates[i])) {
+                if (!this.hasShip(coordinates[i])) {
                     this.board[coordinates[i]].ship.push(coordinates);
                     this.board[coordinates[i]].hasShip = true;
                 }
-                else if (!this.isValid(coordinates[i])) return 'No Valid';
+                else return false;
             }
-        ship.addCoordinates(coordinates);
-        this.addShip(ship);
-            return this.board;
+            ship.addCoordinates(coordinates);
+            this.addShip(ship);
+            return true;
       }
 
       isMoveLegal (move) {
         return !this.board[move].attacked && !this.board[move].missed;
     }
+        
+    hasShip (coordinate) {
+            return this.board[coordinate].hasShip;
+        }
 
-      placeEnemyShips (board) {
-            let carrier = this.createCoordinates(5);
-            let battleship = this.createCoordinates(4);
-            let cruiser = this.createCoordinates(3);
-            let submarine = this.createCoordinates(3);
-            let destroyer = this.createCoordinates(2);
-      }
+      placeEnemyShips (enemyBoard) {
+            let coordinateCarrier = this.createCoordinates();
+            let coordinateBattleship = this.createCoordinates();
+            let coordinateCruiser = this.createCoordinates();
+            let coordinateSubmarine = this.createCoordinates();
+            let coordinateDestroyer = this.createCoordinates();
 
-      createCoordinates (size) {
+            // let array = this.boardArray();
+
+            let carrier = enemyBoard.getAdjacents(enemyBoard, 5, coordinateCarrier);
+            let battleship = enemyBoard.getAdjacents(enemyBoard, 4, coordinateBattleship);
+            let cruiser = enemyBoard.getAdjacents(enemyBoard, 3, coordinateCruiser);
+            let submarine = enemyBoard.getAdjacents(enemyBoard, 3, coordinateSubmarine);
+            let destroyer = enemyBoard.getAdjacents(enemyBoard, 2, coordinateDestroyer);
+
+            let ships = [carrier, battleship, cruiser, submarine, destroyer];
+            let sizes = [5,4,3,3,2];
+            let filtered = [];
+
+            for (let i = 0; i < ships.length; i++) {
+                let temp = ships[i].filter(pos => pos.length === sizes[i]);
+                filtered.push(temp);
+            }
+
+
+
+            filtered.forEach(setOfCoordinates => { 
+                this.placeShip(setOfCoordinates[0].length, setOfCoordinates[0]);
+                
+                // setOfCoordinates.forEach(coordinates => {
+                //     // let affirmative = coordinates.every(position => !this.hasShip(position));
+                //     this.placeShip(coordinates.length, coordinates);
+                //     // coordinates.forEach(position => {
+                //     // })
+                // });
+            });  
+      };
+
+      createCoordinates () {
         let num1 = Math.floor(Math.random() * 8); 
         let num2 = Math.floor(Math.random() * 8); 
         let result = `${num1},${num2}`;
-        let coordinates = [];
 
-        if (this.isMoveLegal(result)) coordinates.push(result);
-            //check if hasShip, not attacked nor missed //
+        if (!this.hasShip(result)) return result;
+
         else {
-            while (!this.isMoveLegal(result)) {
+            while (this.hasShip(result)) {
                 num1 = Math.floor(Math.random() * 8); 
                 num2 = Math.floor(Math.random() * 8); 
                 result = `${num1},${num2}`;
             }
+        return result;
         }
-
-        let split = result.split(',');
-
-        coordinates.push(result);
-
-        for (let i = 0; i < size - 1; i++) {
-            let random = Math.floor(Math.random() * 2); 
-            let key = split[random];
-            
-            let possibilities = [];
-            // 4 get adjacents // 
-            
-        }
-        return coordinates;
     }
 
-      getAdjacents (arrayBoard, size, coordinates) {
-        let adjacents = [[],[],[],[]];
-        let up = 8;
+      getAdjacents (board, size, coordinates) {
+        let arrayBoard = board.boardArray();
+        let adjacents = [[],[]];
+        // let up = 8;
         let right = 1;
         let down = 8;
-        let left = 1;
+        // let left = 1;
         let index = 0;
 
         // get index //
@@ -130,22 +151,22 @@ class Gameboard {
         }
 
         for (let i = 0; i < size; i++) {
-            // 4 adjacents // 
-            if (arrayBoard[index - up]) {
-                let split = coordinates.split(',');
-                let place = arrayBoard[index - up].coordinates;
-                let placeSplit = place.split(',');
-                if (place && place.includes(split[1])) {
-                    adjacents[0].push(arrayBoard[index - up].coordinates);
-                    up += 8;
-                }
-            }
+            // 2 adjacents // 
+            // if (arrayBoard[index - up]) {
+            //     let split = coordinates.split(',');
+            //     let place = arrayBoard[index - up].coordinates;
+            //     let placeSplit = place.split(',');
+            //     if (place && place.includes(split[1])) {
+            //         adjacents[0].push(arrayBoard[index - up].coordinates);
+            //         up += 8;
+            //     }
+            // }
             if (arrayBoard[index + right]) {
                 let split = coordinates.split(',');
                 let place = arrayBoard[index + right].coordinates;
                 let placeSplit = place.split(',');
                 if (place && placeSplit[0] === split[0]) {
-                    adjacents[1].push(arrayBoard[index + right].coordinates);
+                    adjacents[0].push(arrayBoard[index + right].coordinates);
                     right++;
                 }
             }
@@ -154,21 +175,25 @@ class Gameboard {
                 let place = arrayBoard[index + down].coordinates;
                 let placeSplit = place.split(',');
                 if (place && place.includes(split[1])) {
-                    adjacents[2].push(arrayBoard[index + down].coordinates);
+                    adjacents[1].push(arrayBoard[index + down].coordinates);
                     down += 8;
                 }
             }
-            if (arrayBoard[index - left]) {
-                let split = coordinates.split(',');
-                let place = arrayBoard[index - left].coordinates;
-                let placeSplit = place.split(',');
-                if (place && placeSplit[0] === split[0]) {
-                    adjacents[3].push(arrayBoard[index - left].coordinates);
-                    left++;
-                }
-            }
+            // if (arrayBoard[index - left]) {
+            //     let split = coordinates.split(',');
+            //     let place = arrayBoard[index - left].coordinates;
+            //     let placeSplit = place.split(',');
+            //     if (place && placeSplit[0] === split[0]) {
+            //         adjacents[3].push(arrayBoard[index - left].coordinates);
+            //         left++;
+            //     }
+            // }
         }
         return adjacents;
+    }
+
+    hasAllShipsPlaced () {
+        return this.ships.length === 5;
     }
 
       receiveAttack (coordinates) {
@@ -211,23 +236,6 @@ class Gameboard {
       }
 }
 
-
-let board = new Gameboard();
-board.createBoard();
-board.placeShip(3, ['7,1','7,2','7,3']);
-board.placeShip(3, ['0,1', '0,2','0,3'])
-board.receiveAttack('0,1');
-board.receiveAttack('0,2');
-board.receiveAttack('0,3');
-board.receiveAttack('7,1');
-board.receiveAttack('7,2');
-board.receiveAttack('7,3');
-let arr = board.boardArray();
-
-let adj = board.getAdjacents(arr, 4, '6,7');
-
-
-
 // Player Class //
 class Player {
     constructor (gameboard) {
@@ -256,8 +264,6 @@ class Player {
         return result;
     }
 }
-
-const play = new Player(board);
 
 
 module.exports = {Ship, Gameboard, Player};
