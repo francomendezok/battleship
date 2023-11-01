@@ -2,30 +2,20 @@ import { Ship, Gameboard, Player } from "./factories";
 import { writeName, renderInitalBoards, renderMyBoard, renderEnemyBoard,  clean, renderWin, renderLose } from "./render";
 
 
-function placingShips () {
-    
-}
-
-function game (name) {
+function game (board) {
     let enemyBoard = new Gameboard();
-    
-    let myBoard = new Gameboard();
-    myBoard.createBoard();
+    let myBoard = board;
     let player = new Player(myBoard);
+
     enemyBoard.createBoard();
-
-    renderInitalBoards(name);
-    selectShips(myBoard);
-    
-    
-    
     let enemy = new Player(enemyBoard);
-    enemyBoard.receiveAttack('0,4');
-    enemyBoard.placeEnemyShips();
 
     
-    renderMyBoard(player.gameboard);
-    renderEnemyBoard(enemy.gameboard);
+    // enemyBoard.placeEnemyShips(enemyBoard);
+
+    
+    renderMyBoard(board);
+    renderEnemyBoard(enemyBoard);
 
     const enemyBoxes = document.querySelectorAll('.enemy-div-box');
     let eBoxes = [...enemyBoxes];
@@ -51,8 +41,8 @@ function game (name) {
                   }, 1000); 
                   
     
-                let mySunk = myBoard.allSunk();
-                let enemySunk = enemyBoard.allSunk();
+                // let mySunk = myBoard.allSunk();
+                // let enemySunk = enemyBoard.allSunk();
     
                 // if (mySunk) {
                 //     clean();

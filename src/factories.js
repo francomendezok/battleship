@@ -78,20 +78,20 @@ class Gameboard {
             return this.board[coordinate].hasShip;
         }
 
-      placeEnemyShips () {
+      placeEnemyShips (enemyBoard) {
             let coordinateCarrier = this.createCoordinates();
             let coordinateBattleship = this.createCoordinates();
             let coordinateCruiser = this.createCoordinates();
             let coordinateSubmarine = this.createCoordinates();
             let coordinateDestroyer = this.createCoordinates();
 
-            let array = this.boardArray();
+            // let array = this.boardArray();
 
-            let carrier = this.getAdjacents(array, 5, coordinateCarrier);
-            let battleship = this.getAdjacents(array, 4, coordinateBattleship);
-            let cruiser = this.getAdjacents(array, 3, coordinateCruiser);
-            let submarine = this.getAdjacents(array, 3, coordinateSubmarine);
-            let destroyer = this.getAdjacents(array, 2, coordinateDestroyer);
+            let carrier = enemyBoard.getAdjacents(enemyBoard, 5, coordinateCarrier);
+            let battleship = enemyBoard.getAdjacents(enemyBoard, 4, coordinateBattleship);
+            let cruiser = enemyBoard.getAdjacents(enemyBoard, 3, coordinateCruiser);
+            let submarine = enemyBoard.getAdjacents(enemyBoard, 3, coordinateSubmarine);
+            let destroyer = enemyBoard.getAdjacents(enemyBoard, 2, coordinateDestroyer);
 
             let ships = [carrier, battleship, cruiser, submarine, destroyer];
             let sizes = [5,4,3,3,2];

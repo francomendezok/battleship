@@ -236,6 +236,7 @@ function renderPlaceShips (name) {
             let name = title.textContent;
             let split = name.split(' ');
             let ship = split[split.length -1];
+            let actualName =  split[0].split(',')[0];
             let index = ships.indexOf(ship);
             let size = sizes[index];
             let axis = document.querySelector('.axis');
@@ -253,10 +254,9 @@ function renderPlaceShips (name) {
                     pos += 1;
                 if (pos === ships.length) {
                         clean();
-                        renderInitalBoards(name);
+                        renderInitalBoards(actualName, board);
                 }
-                myName.innerHTML = '';
-                myName.innerHTML = `${name},  place your ${ships[pos]}`;
+                    myName.innerHTML = `${actualName},  place your ${ships[pos]}`;
                 }
             }
 
@@ -271,10 +271,9 @@ function renderPlaceShips (name) {
                 if (pos === ships.length) {
                         clean();
                         //renderBothBoards(myBoard)//
-                        renderInitalBoards(name);
+                        renderInitalBoards(actualName, board);
                 }
-                myName.innerHTML = '';
-                myName.innerHTML = `${name},  place your ${ships[pos]}`;
+                    myName.innerHTML = `${actualName},  place your ${ships[pos]}`;
                 }
             }
 
@@ -294,12 +293,8 @@ function renderPlaceShips (name) {
     renderMyBoard(board);    
 };
 
-function cleanAndRenderText () {
 
-}
-
-
-function renderInitalBoards (named) {
+function renderInitalBoards (name, board) {
     const main = document.getElementById('main');
 
     const mySection = document.createElement('div');
@@ -361,6 +356,8 @@ function renderInitalBoards (named) {
     main.appendChild(enemySection);
 
     main.classList.add('main-game');
+    renderMyBoard(board);
+    game(board);
 }
 
 function renderMyBoard (board) {
@@ -397,9 +394,6 @@ function renderEnemyBoard (board) {
         let split = coordinates.split(' ');
         let num = split[1]; 
         
-        if (board.board[num].hasShip) {
-            box.style.background = 'orange';
-        }
         if (board.board[num].attacked) {
             box.innerHTML = '❌';
             box.style.background = '#F5C2C1';
