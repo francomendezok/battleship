@@ -55,7 +55,7 @@ class Gameboard {
       }
 
       placeShip (size, coordinates) {
-        if (size !== coordinates.length) return 'Size and coordinates length should be equal';
+        if (size !== coordinates.length) return false;
 
         const ship = new Ship(size);
             for (let i = 0; i < coordinates.length; i++) {

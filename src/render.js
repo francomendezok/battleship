@@ -116,10 +116,17 @@ function renderPlaceShips (name) {
                 }
                     else {
                         adjacents[0].forEach(position => {
-                        let ubi = document.getElementById(position);
-                        ubi.style.background = 'black';
-                        div.style.background = 'black';
-                        div.style.cursor = 'crosshair'; 
+                            if (board.hasShip(position)) {
+                                div.style.cursor = 'not-allowed';
+                                let ubi = document.getElementById(position);
+                                ubi.style.background = 'green';
+                            }
+                            else {
+                                let ubi = document.getElementById(position);
+                                ubi.style.background = 'black';
+                                div.style.background = 'black';
+                                div.style.cursor = 'crosshair'; 
+                            }
                         });
                     }; 
                 };   
@@ -172,6 +179,7 @@ function renderPlaceShips (name) {
                     adjacents[0].forEach(position => {
                         if (board.hasShip(position)) {
                             div.style.cursor = 'not-allowed';
+                            div.style.background = 'lightgoldenrodyellow';
                             let ubi = document.getElementById(position);
                             ubi.style.background = 'green';
                         }
@@ -230,7 +238,7 @@ function renderPlaceShips (name) {
             //     let placed = board.placeShip(size, adjacents[a]);
             // }
             
-            // renderMyBoard(board);
+            renderMyBoard(board);
             // if (place ship is those coordinates === true) {
                 pos += 1;
                 if (pos === ships.length) {
@@ -257,6 +265,7 @@ function renderPlaceShips (name) {
     mySection.appendChild(myGameSection);
     
     board.placeShip(3, ['1,1', '1,2', '1,3']);
+    board.receiveAttack('5,5');
     main.appendChild(mySection);
     renderMyBoard(board);
 
@@ -264,6 +273,7 @@ function renderPlaceShips (name) {
     
 
 }
+
 
 function renderInitalBoards (name) {
     const main = document.getElementById('main');
@@ -330,24 +340,28 @@ function renderInitalBoards (name) {
 }
 
 function renderMyBoard (board) {
-    const boxes = document.querySelectorAll('.my-div-box');
-    boxes.forEach(box => {
-       let coordinates = box.id;
-        if (board.board[coordinates].hasShip) {
+    let arr = board.boardArray();
+
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i].hasShip) {
+            let box = document.getElementById(arr[i].coordinates);
             box.style.background = 'green';
         }
-        if (board.board[coordinates].attacked) {
+        if (arr[i].attacked) {
+            let box = document.getElementById(arr[i].coordinates);
             box.innerHTML = '❌';
             box.style.background = '#F5C2C1';
         }
-        if (board.board[coordinates].missed) {
+        if (arr[i].missed) {
+            let box = document.getElementById(arr[i].coordinates);
             box.innerHTML = '💦';
             box.style.background = 'lightblue';
         }
-        // else if (!board.board[coordinates].missed && !board.board[coordinates].attacked && board.board[coordinates].hasShip) {
-        //     box.style.background = 'lightgoldenrodyellow';
-        // }
-    });
+        if (!arr[i].hasShip && !arr[i].attacked && !arr[i].missed) {
+            let box = document.getElementById(arr[i].coordinates);
+            box.style.background = 'lightgoldenrodyellow';
+        }
+    };
 };
 
 
