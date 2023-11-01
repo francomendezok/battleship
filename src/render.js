@@ -60,7 +60,7 @@ function renderPlaceShips (name) {
 
     let pos = 0;
 
-    myName.textContent = `${name},  place your  ${ships[pos]}`;
+    myName.innerHTML = `${name},  place your  ${ships[pos]}`;
     myName.dataset.size = pos;
 
     axis.innerHTML = 'Axis X';
@@ -105,7 +105,7 @@ function renderPlaceShips (name) {
 
             if (axisText === 'X') {
                 let adjWithShip = adjacents[0].some(x => board.hasShip(x));
-                if (board.hasShip(div.id) || div.dataset.cNotAllowed || adjWithShip  || adjacents[0].length < size) {
+                if (board.hasShip(div.id) || adjWithShip  || adjacents[0].length < size) {
                     if (board.hasShip(div.id)) {
                         div.style.cursor = 'not-allowed';
                     }
@@ -134,7 +134,7 @@ function renderPlaceShips (name) {
 
             if (axisText === 'Y') {
                 let adjWithShip = adjacents[1].some(x => board.hasShip(x));
-                if (board.hasShip(div.id) || div.dataset.yNotAllowed || adjWithShip  || adjacents[1].length < size) {
+                if (board.hasShip(div.id) || adjWithShip  || adjacents[1].length < size) {
                     if (board.hasShip(div.id)) {
                         div.style.cursor = 'not-allowed';
                     }
@@ -145,13 +145,23 @@ function renderPlaceShips (name) {
                 }
                     else {
                         adjacents[1].forEach(position => {
-                        let ubi = document.getElementById(position);
-                        ubi.style.background = 'black';
-                        div.style.background = 'black';
-                        div.style.cursor = 'crosshair'; 
+                            if (board.hasShip(position)) {
+                                div.style.cursor = 'not-allowed';
+                                let ubi = document.getElementById(position);
+                                ubi.style.background = 'green';
+                            }
+                            else {
+                                let ubi = document.getElementById(position);
+                                ubi.style.background = 'black';
+                                div.style.background = 'black';
+                                div.style.cursor = 'crosshair'; 
+                            }
                         });
                     };  
                 }; 
+
+
+
           });
 
           div.addEventListener('mouseleave', () => {
@@ -205,6 +215,7 @@ function renderPlaceShips (name) {
                     adjacents[1].forEach(position => {
                         if (board.hasShip(position)) {
                             div.style.cursor = 'not-allowed';
+                            div.style.background = 'lightgoldenrodyellow';
                             let ubi = document.getElementById(position);
                             ubi.style.background = 'green';
                         }
@@ -216,43 +227,58 @@ function renderPlaceShips (name) {
                     });
                 }
             };
+
+
           });
 
           div.addEventListener('click', () => {
-            // let title = document.querySelector('.my-name');
-            // let name = title.textContent;
-            // let split = name.split(' ');
-            // let ship = split[split.length -1];
-            // let index = ships.indexOf(ship);
-            // let size = sizes[index];
-            // let axis = document.querySelector('.axis');
-            // let axisText = axis.textContent.split(' ')[1];
+            let title = document.querySelector('.my-name');
+            let name = title.textContent;
+            let split = name.split(' ');
+            let ship = split[split.length -1];
+            let index = ships.indexOf(ship);
+            let size = sizes[index];
+            let axis = document.querySelector('.axis');
+            let axisText = axis.textContent.split(' ')[1];
 
-            // let adjacents = board.getAdjacents(board, size, div.id);
+            let adjacents = board.getAdjacents(board, size, div.id);
 
-            // if (axisText === 'X') {
-            //     let placed = board.placeShip(size, adjacents[0]);
-            // }
+            if (axisText === 'X') {
+                size += 1;
+                adjacents[0].unshift(div.id);
 
-            // if (axisText === 'Y') {
-            //     let placed = board.placeShip(size, adjacents[a]);
-            // }
-            
-            renderMyBoard(board);
-            // if (place ship is those coordinates === true) {
-                pos += 1;
+                let placed = board.placeShip(size, adjacents[0]);
+                if (placed) {
+                    renderMyBoard(board);
+                    pos += 1;
                 if (pos === ships.length) {
                         clean();
                         renderInitalBoards(name);
                 }
-                myName.textContent = `${name},  place your  ${ships[pos]}`;
-            // }
-            
-            //render board // 
-            // render text with name of ship // 
-            // check if hasAllShipsPlaced // 
-            // if so, render initial boards to play // 
-          })
+                myName.innerHTML = '';
+                myName.innerHTML = `${name},  place your ${ships[pos]}`;
+                }
+            }
+
+            if (axisText === 'Y') {
+                size += 1;
+                adjacents[1].unshift(div.id);
+
+                let placed = board.placeShip(size, adjacents[1]);
+                if (placed) {
+                    renderMyBoard(board);
+                    pos += 1;
+                if (pos === ships.length) {
+                        clean();
+                        //renderBothBoards(myBoard)//
+                        renderInitalBoards(name);
+                }
+                myName.innerHTML = '';
+                myName.innerHTML = `${name},  place your ${ships[pos]}`;
+                }
+            }
+
+          });
           myBoard.appendChild(div);
         };
     };
@@ -264,18 +290,16 @@ function renderPlaceShips (name) {
     mySection.appendChild(myNameBox);
     mySection.appendChild(myGameSection);
     
-    board.placeShip(3, ['1,1', '1,2', '1,3']);
-    board.receiveAttack('5,5');
     main.appendChild(mySection);
-    renderMyBoard(board);
+    renderMyBoard(board);    
+};
 
-    // IF ANY OF ADJACENTS HAS SHIP MARKED WITH RED AND CROSS // 
-    
+function cleanAndRenderText () {
 
 }
 
 
-function renderInitalBoards (name) {
+function renderInitalBoards (named) {
     const main = document.getElementById('main');
 
     const mySection = document.createElement('div');
@@ -312,7 +336,7 @@ function renderInitalBoards (name) {
           div.classList.add('my-div-box');
           divEnemy.classList.add('enemy-div-box');
 
-          div.id = `P ${coordinate}`;
+          div.id = `${coordinate}`;
           divEnemy.id = `E ${coordinate}`;
   
           myBoard.appendChild(div);
@@ -320,8 +344,8 @@ function renderInitalBoards (name) {
         }
     }
 
-    myName.textContent = name;
-    enemyName.textContent = 'Enemy';
+    myName.innerHTML = name;
+    enemyName.innerHTML = 'Enemy';
 
     myNameBox.appendChild(myName);
     myGameSection.appendChild(myBoard);
