@@ -104,62 +104,47 @@ function renderPlaceShips (name) {
             let adjacents = board.getAdjacents(board, size, div.id);
 
             if (axisText === 'X') {
-                // BLACK //
                 let adjWithShip = adjacents[0].some(x => board.hasShip(x));
-                if (!div.dataset.xNotAllowed || !adjWithShip  || !adjacents[0].length < size) {
-                    adjacents[0].forEach(position => {
-                        let ubi = document.getElementById(position);
-                        div.style.background = 'black';
-                        ubi.style.background = 'black';
-                        div.style.cursor = 'crosshair'; 
-                    });
-                };
-
-                // RED //
-                if (board.hasShip(div.id) || div.dataset.xNotAllowed || adjWithShip  || adjacents[0].length < size) {
-                    if (div.dataset.xNotAllowed) {
-                        div.style.background = 'red';
+                if (board.hasShip(div.id) || div.dataset.cNotAllowed || adjWithShip  || adjacents[0].length < size) {
+                    if (board.hasShip(div.id)) {
                         div.style.cursor = 'not-allowed';
                     }
                     else {
-                        adjacents[0].forEach(position => {
-                            let ubi = document.getElementById(position);
-                            div.style.background = 'red';
-                            ubi.style.background = 'red';
-                            div.style.cursor = 'not-allowed';
-                        })
+                        div.style.background = 'red';
+                        div.style.cursor = 'not-allowed';
                     }
+                }
+                    else {
+                        adjacents[0].forEach(position => {
+                        let ubi = document.getElementById(position);
+                        ubi.style.background = 'black';
+                        div.style.background = 'black';
+                        div.style.cursor = 'crosshair'; 
+                        });
+                    }; 
                 };   
-            };
+        
 
             if (axisText === 'Y') {
-                // BLACK //
                 let adjWithShip = adjacents[1].some(x => board.hasShip(x));
-                if (!div.dataset.yNotAllowed || !adjWithShip  || !adjacents[1].length < size) {
-                    adjacents[1].forEach(position => {
-                        let ubi = document.getElementById(position);
-                        div.style.background = 'black';
-                        ubi.style.background = 'black';
-                        div.style.cursor = 'crosshair'; 
-                    });
-                };
-
-               // RED //
-               if (board.hasShip(div.id) || div.dataset.yNotAllowed || adjWithShip  || adjacents[1].length < size) {
-                if (div.dataset.yNotAllowed) {
-                    div.style.background = 'red';
-                    div.style.cursor = 'not-allowed';
-                }
-                else {
-                    adjacents[1].forEach(position => {
-                        let ubi = document.getElementById(position);
-                        div.style.background = 'red';
-                        ubi.style.background = 'red';
+                if (board.hasShip(div.id) || div.dataset.yNotAllowed || adjWithShip  || adjacents[1].length < size) {
+                    if (board.hasShip(div.id)) {
                         div.style.cursor = 'not-allowed';
-                    })
+                    }
+                    else {
+                        div.style.background = 'red';
+                        div.style.cursor = 'not-allowed';
+                    }
                 }
-            };  
-            }; 
+                    else {
+                        adjacents[1].forEach(position => {
+                        let ubi = document.getElementById(position);
+                        ubi.style.background = 'black';
+                        div.style.background = 'black';
+                        div.style.cursor = 'crosshair'; 
+                        });
+                    };  
+                }; 
           });
 
           div.addEventListener('mouseleave', () => {
@@ -179,16 +164,24 @@ function renderPlaceShips (name) {
                     div.style.background = 'lightgoldenrodyellow';
                     div.style.cursor = 'crosshair'; 
                 }
-                adjacents[0].forEach(position => {
-                    let ubi = document.getElementById(position);
-                    div.style.background = 'lightgoldenrodyellow';
-                    ubi.style.background = 'lightgoldenrodyellow';
-
-                    if (board.hasShip(ubi.id)) {
-                        div.style.background = 'green';
-                        ubi.style.background = 'green';
-                    }
-                });
+                if (board.hasShip(div.id)) {
+                    div.style.background = 'green';
+                    div.style.cursor = 'not-allowed';
+                }
+                else {
+                    adjacents[0].forEach(position => {
+                        if (board.hasShip(position)) {
+                            div.style.cursor = 'not-allowed';
+                            let ubi = document.getElementById(position);
+                            ubi.style.background = 'green';
+                        }
+                        else {
+                            let ubi = document.getElementById(position);
+                            ubi.style.background = 'lightgoldenrodyellow';
+                            div.style.background = 'lightgoldenrodyellow';
+                        }
+                    });
+                }
             };
 
             if (axisText === 'Y') {
@@ -196,14 +189,26 @@ function renderPlaceShips (name) {
                     div.style.background = 'lightgoldenrodyellow';
                     div.style.cursor = 'crosshair'; 
                 }
-                adjacents[1].forEach(position => {
-                        let ubi = document.getElementById(position);
-                        div.style.background = 'lightgoldenrodyellow';
-                        ubi.style.background = 'lightgoldenrodyellow';
-                });
+                if (board.hasShip(div.id)) {
+                    div.style.background = 'green';
+                    div.style.cursor = 'not-allowed';
+                }
+                else {
+                    adjacents[1].forEach(position => {
+                        if (board.hasShip(position)) {
+                            div.style.cursor = 'not-allowed';
+                            let ubi = document.getElementById(position);
+                            ubi.style.background = 'green';
+                        }
+                        else {
+                            let ubi = document.getElementById(position);
+                            ubi.style.background = 'lightgoldenrodyellow';
+                            div.style.background = 'lightgoldenrodyellow';
+                        }
+                    });
+                }
             };
-            // adjacents cancel hover //
-          })
+          });
 
           div.addEventListener('click', () => {
             // let title = document.querySelector('.my-name');
@@ -251,7 +256,7 @@ function renderPlaceShips (name) {
     mySection.appendChild(myNameBox);
     mySection.appendChild(myGameSection);
     
-    board.placeShip(3, ['0,1', '0,2', '0,3']);
+    board.placeShip(3, ['1,1', '1,2', '1,3']);
     main.appendChild(mySection);
     renderMyBoard(board);
 
