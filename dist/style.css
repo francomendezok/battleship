@@ -188,20 +188,14 @@ a {
 }
 
 .my-div-box, .enemy-div-box {
-    background-color: lightgoldenrodyellow;
-    border: 1px solid black;
+    background-color: #172554;
+    border: 1px solid lightgray;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 200%;
-    border-radius: 2px;
 }
-
-.my-div-box {
-    cursor: pointer;
-}
-
 
 .main-game {
     width: 100%;
