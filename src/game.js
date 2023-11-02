@@ -11,7 +11,7 @@ function game (board) {
     let enemy = new Player(enemyBoard);
 
     
-    // enemyBoard.placeEnemyShips(enemyBoard);
+    enemyBoard.placeEnemyShips(enemyBoard);
 
     
     renderMyBoard(board);
@@ -41,17 +41,17 @@ function game (board) {
                   }, 1000); 
                   
     
-                // let mySunk = myBoard.allSunk();
-                // let enemySunk = enemyBoard.allSunk();
+                let mySunk = myBoard.allSunk();
+                let enemySunk = enemyBoard.allSunk();
     
-                // if (mySunk) {
-                //     clean();
-                //     renderLose();
-                // };
-                // if (enemySunk) {
-                //     clean();
-                //     renderWin();
-                // };
+                if (mySunk) {
+                    clean();
+                    renderLose();
+                };
+                if (enemySunk) {
+                    clean();
+                    renderWin();
+                };
             }
 
         });

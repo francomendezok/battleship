@@ -85,7 +85,6 @@ class Gameboard {
             let coordinateSubmarine = this.createCoordinates();
             let coordinateDestroyer = this.createCoordinates();
 
-            // let array = this.boardArray();
 
             let carrier = enemyBoard.getAdjacents(enemyBoard, 5, coordinateCarrier);
             let battleship = enemyBoard.getAdjacents(enemyBoard, 4, coordinateBattleship);
@@ -95,25 +94,49 @@ class Gameboard {
 
             let ships = [carrier, battleship, cruiser, submarine, destroyer];
             let sizes = [5,4,3,3,2];
-            let filtered = [];
 
             for (let i = 0; i < ships.length; i++) {
-                let temp = ships[i].filter(pos => pos.length === sizes[i]);
-                filtered.push(temp);
-            }
+                let adjacents = ships[i].filter(pos => pos.length === sizes[i]);
 
+                if (adjacents.length) {
+                    let placed = this.placeShip(sizes[i], adjacents[1] || adjacents[0]); // try to place ship // 
 
+                    while (!placed) {
+                        let newCoordinates = this.createCoordinates(); // create new coordinates // 
+                        let newShip = enemyBoard.getAdjacents(enemyBoard, sizes[i], newCoordinates); // get new adjacents //
+                        let axis = newShip.filter(pos => pos.length === sizes[i]); // get axis //
+                        
+                        while (!axis.length) {
+                            newCoordinates = this.createCoordinates(); // create new coordinates // 
+                            newShip = enemyBoard.getAdjacents(enemyBoard, sizes[i], newCoordinates); // get new adjacents //
+                            axis = newShip.filter(pos => pos.length === sizes[i]); // get axis //
+                        }
+                        placed = this.placeShip(sizes[i], axis[1] || axis[0]); // place ship // 
+                    }
+                }
+                    else {
+                        while (!adjacents.length) { 
+                            let newCoordinates = this.createCoordinates(); // create new coordinates // 
+                            let newShip = enemyBoard.getAdjacents(enemyBoard, sizes[i], newCoordinates); // get new adjacents //
+                            adjacents = newShip.filter(pos => pos.length === sizes[i]); // get axis //
+                        }
 
-            filtered.forEach(setOfCoordinates => { 
-                this.placeShip(setOfCoordinates[0].length, setOfCoordinates[0]);
-                
-                // setOfCoordinates.forEach(coordinates => {
-                //     // let affirmative = coordinates.every(position => !this.hasShip(position));
-                //     this.placeShip(coordinates.length, coordinates);
-                //     // coordinates.forEach(position => {
-                //     // })
-                // });
-            });  
+                        let placed = this.placeShip(sizes[i], adjacents[1] || adjacents[0]); // place ship // 
+
+                        while (!placed) {
+                            let newCoordinates = this.createCoordinates(); // create new coordinates // 
+                            let newShip = enemyBoard.getAdjacents(enemyBoard, sizes[i], newCoordinates); // get new adjacents //
+                            let axis = newShip.filter(pos => pos.length === sizes[i]); // get axis //
+                            
+                            while (!axis.length) {
+                                newCoordinates = this.createCoordinates(); // create new coordinates // 
+                                newShip = enemyBoard.getAdjacents(enemyBoard, sizes[i], newCoordinates); // get new adjacents //
+                                axis = newShip.filter(pos => pos.length === sizes[i]); // get axis //
+                            }
+                            placed = this.placeShip(sizes[i], axis[1] || axis[0]); // place ship // 
+                        };
+                    };
+            };
       };
 
       createCoordinates () {
@@ -266,4 +289,11 @@ class Player {
 }
 
 
+// let enemy = new Gameboard();
+
+// enemy.createBoard();
+
+// enemy.placeEnemyShips(enemy);
+
+// console.log(enemy.board);
 module.exports = {Ship, Gameboard, Player};

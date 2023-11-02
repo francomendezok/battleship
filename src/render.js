@@ -402,10 +402,10 @@ function renderEnemyBoard (board) {
             box.innerHTML = '💦';
             box.style.background = 'lightblue';
         }
-        if (board.board[num].hasShip) {
-            box.innerHTML = '🚢';
-            box.style.background = 'lightblue';
-        }
+        // if (board.board[num].hasShip) {
+        //     box.innerHTML = '🚢';
+        //     box.style.background = 'lightblue';
+        // }
     }
 }
 
