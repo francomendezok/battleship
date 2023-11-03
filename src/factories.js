@@ -32,29 +32,28 @@ class Gameboard {
           for (let j = 0; j < size; j += 1) {
             const coordinate = `${i},${j}`;
             this.board[coordinate] = { coordinates: coordinate, attacked: false, missed: false, hasShip: false, ship: [] };
-        }
+            }
         }
         return this.board;
-      }
+    }
 
-      isValid (coordinates) {
+    isValid (coordinates) {
         let arr = coordinates.split(',');
         let a = Number(arr[0]);
         let b = Number(arr[1]);
 
-
         return a >= 0 && a <= 7 && b >= 0 && b <= 7;
-      }
+    }
 
-      getBoard() {
+    getBoard() {
         return this.board;
-      }
+    }
 
-      addShip (ship) {
+    addShip (ship) {
         this.ships.push(ship);
-      }
+    }
 
-      placeShip (size, coordinates) {
+    placeShip (size, coordinates) {
         if (size !== coordinates.length) return false;
 
         const ship = new Ship(size);
@@ -68,55 +67,78 @@ class Gameboard {
             ship.addCoordinates(coordinates);
             this.addShip(ship);
             return true;
-      }
+    }
 
-      isMoveLegal (move) {
+    isMoveLegal (move) {
         return !this.board[move].attacked && !this.board[move].missed;
     }
         
     hasShip (coordinate) {
-            return this.board[coordinate].hasShip;
-        }
+        return this.board[coordinate].hasShip;
+    }
 
-      placeEnemyShips (enemyBoard) {
-            let coordinateCarrier = this.createCoordinates();
-            let coordinateBattleship = this.createCoordinates();
-            let coordinateCruiser = this.createCoordinates();
-            let coordinateSubmarine = this.createCoordinates();
-            let coordinateDestroyer = this.createCoordinates();
+    placeEnemyShips (enemyBoard) {
+        let coordinateCarrier = this.createCoordinates();
+        let coordinateBattleship = this.createCoordinates();
+        let coordinateCruiser = this.createCoordinates();
+        let coordinateSubmarine = this.createCoordinates();
+        let coordinateDestroyer = this.createCoordinates();
 
-            // let array = this.boardArray();
 
-            let carrier = enemyBoard.getAdjacents(enemyBoard, 5, coordinateCarrier);
-            let battleship = enemyBoard.getAdjacents(enemyBoard, 4, coordinateBattleship);
-            let cruiser = enemyBoard.getAdjacents(enemyBoard, 3, coordinateCruiser);
-            let submarine = enemyBoard.getAdjacents(enemyBoard, 3, coordinateSubmarine);
-            let destroyer = enemyBoard.getAdjacents(enemyBoard, 2, coordinateDestroyer);
+        let carrier = enemyBoard.getAdjacents(enemyBoard, 5, coordinateCarrier);
+        let battleship = enemyBoard.getAdjacents(enemyBoard, 4, coordinateBattleship);
+        let cruiser = enemyBoard.getAdjacents(enemyBoard, 3, coordinateCruiser);
+        let submarine = enemyBoard.getAdjacents(enemyBoard, 3, coordinateSubmarine);
+        let destroyer = enemyBoard.getAdjacents(enemyBoard, 2, coordinateDestroyer);
 
-            let ships = [carrier, battleship, cruiser, submarine, destroyer];
-            let sizes = [5,4,3,3,2];
-            let filtered = [];
+        let ships = [carrier, battleship, cruiser, submarine, destroyer];
+        let sizes = [5,4,3,3,2];
 
-            for (let i = 0; i < ships.length; i++) {
-                let temp = ships[i].filter(pos => pos.length === sizes[i]);
-                filtered.push(temp);
+        for (let i = 0; i < ships.length; i++) {
+            let adjacents = ships[i].filter(pos => pos.length === sizes[i]);
+
+            if (adjacents.length) {
+                let placed = this.placeShip(sizes[i], adjacents[1] || adjacents[0]); // try to place ship // 
+
+                while (!placed) {
+                    let newCoordinates = this.createCoordinates(); // create new coordinates // 
+                    let newShip = enemyBoard.getAdjacents(enemyBoard, sizes[i], newCoordinates); // get new adjacents //
+                    let axis = newShip.filter(pos => pos.length === sizes[i]); // get axis //
+                        
+                    while (!axis.length) {
+                        newCoordinates = this.createCoordinates(); // create new coordinates // 
+                        newShip = enemyBoard.getAdjacents(enemyBoard, sizes[i], newCoordinates); // get new adjacents //
+                        axis = newShip.filter(pos => pos.length === sizes[i]); // get axis //
+                    }
+                    placed = this.placeShip(sizes[i], axis[1] || axis[0]); // place ship // 
+                }
             }
+                else {
+                    while (!adjacents.length) { 
+                        let newCoordinates = this.createCoordinates(); // create new coordinates // 
+                        let newShip = enemyBoard.getAdjacents(enemyBoard, sizes[i], newCoordinates); // get new adjacents //
+                        adjacents = newShip.filter(pos => pos.length === sizes[i]); // get axis //
+                    }
 
+                    let placed = this.placeShip(sizes[i], adjacents[1] || adjacents[0]); // place ship // 
 
+                    while (!placed) {
+                        let newCoordinates = this.createCoordinates(); // create new coordinates // 
+                        let newShip = enemyBoard.getAdjacents(enemyBoard, sizes[i], newCoordinates); // get new adjacents //
+                        let axis = newShip.filter(pos => pos.length === sizes[i]); // get axis //
+                            
+                        while (!axis.length) {
+                            newCoordinates = this.createCoordinates(); // create new coordinates // 
+                            newShip = enemyBoard.getAdjacents(enemyBoard, sizes[i], newCoordinates); // get new adjacents //
+                            axis = newShip.filter(pos => pos.length === sizes[i]); // get axis //
+                        }
+                        placed = this.placeShip(sizes[i], axis[1] || axis[0]); // place ship // 
+                    };
+                };
+        };
+    };
 
-            filtered.forEach(setOfCoordinates => { 
-                this.placeShip(setOfCoordinates[0].length, setOfCoordinates[0]);
-                
-                // setOfCoordinates.forEach(coordinates => {
-                //     // let affirmative = coordinates.every(position => !this.hasShip(position));
-                //     this.placeShip(coordinates.length, coordinates);
-                //     // coordinates.forEach(position => {
-                //     // })
-                // });
-            });  
-      };
-
-      createCoordinates () {
+    createCoordinates () {
         let num1 = Math.floor(Math.random() * 8); 
         let num2 = Math.floor(Math.random() * 8); 
         let result = `${num1},${num2}`;
@@ -133,13 +155,11 @@ class Gameboard {
         }
     }
 
-      getAdjacents (board, size, coordinates) {
+    getAdjacents (board, size, coordinates) {
         let arrayBoard = board.boardArray();
         let adjacents = [[],[]];
-        // let up = 8;
         let right = 1;
         let down = 8;
-        // let left = 1;
         let index = 0;
 
         // get index //
@@ -151,16 +171,6 @@ class Gameboard {
         }
 
         for (let i = 0; i < size; i++) {
-            // 2 adjacents // 
-            // if (arrayBoard[index - up]) {
-            //     let split = coordinates.split(',');
-            //     let place = arrayBoard[index - up].coordinates;
-            //     let placeSplit = place.split(',');
-            //     if (place && place.includes(split[1])) {
-            //         adjacents[0].push(arrayBoard[index - up].coordinates);
-            //         up += 8;
-            //     }
-            // }
             if (arrayBoard[index + right]) {
                 let split = coordinates.split(',');
                 let place = arrayBoard[index + right].coordinates;
@@ -179,15 +189,6 @@ class Gameboard {
                     down += 8;
                 }
             }
-            // if (arrayBoard[index - left]) {
-            //     let split = coordinates.split(',');
-            //     let place = arrayBoard[index - left].coordinates;
-            //     let placeSplit = place.split(',');
-            //     if (place && placeSplit[0] === split[0]) {
-            //         adjacents[3].push(arrayBoard[index - left].coordinates);
-            //         left++;
-            //     }
-            // }
         }
         return adjacents;
     }
@@ -196,7 +197,7 @@ class Gameboard {
         return this.ships.length === 5;
     }
 
-      receiveAttack (coordinates) {
+    receiveAttack (coordinates) {
         let str = `${coordinates}`;
 
         if (this.board[str].attacked || this.board[str].missed) return;
@@ -215,17 +216,17 @@ class Gameboard {
             }
 
             return true;
-      }
+    }
 
-      getShips () {
+    getShips () {
         return this.ships;
-      }
+    }
 
-      allSunk () {
+    allSunk () {
         return this.ships.every(ship => ship.sunk === true);
-      }
+    }
 
-      boardArray () {
+    boardArray () {
         const obj = this.board;
         const array = [];
 
@@ -233,7 +234,7 @@ class Gameboard {
             array.push(obj[key]);
           }
           return array;
-      }
+    }
 }
 
 // Player Class //
@@ -245,7 +246,6 @@ class Player {
     isMoveLegal (move) {
         return !this.gameboard.board[move].attacked && !this.gameboard.board[move].missed;
     }
-
 
     makeRandomMove () {
         let num1 = Math.floor(Math.random() * 8); 
@@ -264,6 +264,5 @@ class Player {
         return result;
     }
 }
-
 
 module.exports = {Ship, Gameboard, Player};

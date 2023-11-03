@@ -35,8 +35,7 @@ function writeName () {
         }
             else alert('Please Write Your Name');
     });
-}
-
+};
 
 function renderPlaceShips (name) {
     const main = document.getElementById('main');
@@ -84,12 +83,8 @@ function renderPlaceShips (name) {
           const div = document.createElement('div');
           div.classList.add('my-div-box');
           div.id = `${coordinate}`;
-          if (j === 7) {
-            div.dataset.xNotAllowed = true;
-          }
-          if (i === 7) {
-            div.dataset.yNotAllowed = true;
-          }
+          if (j === 7) div.dataset.xNotAllowed = true;
+          if (i === 7) div.dataset.yNotAllowed = true;
 
           div.addEventListener('mouseover', () => {
             let title = document.querySelector('.my-name');
@@ -119,7 +114,7 @@ function renderPlaceShips (name) {
                             if (board.hasShip(position)) {
                                 div.style.cursor = 'not-allowed';
                                 let ubi = document.getElementById(position);
-                                ubi.style.background = 'green';
+                                ubi.style.background = '#15803d';
                             }
                             else {
                                 let ubi = document.getElementById(position);
@@ -131,7 +126,6 @@ function renderPlaceShips (name) {
                     }; 
                 };   
         
-
             if (axisText === 'Y') {
                 let adjWithShip = adjacents[1].some(x => board.hasShip(x));
                 if (board.hasShip(div.id) || adjWithShip  || adjacents[1].length < size) {
@@ -148,7 +142,7 @@ function renderPlaceShips (name) {
                             if (board.hasShip(position)) {
                                 div.style.cursor = 'not-allowed';
                                 let ubi = document.getElementById(position);
-                                ubi.style.background = 'green';
+                                ubi.style.background = '#15803d';
                             }
                             else {
                                 let ubi = document.getElementById(position);
@@ -159,9 +153,6 @@ function renderPlaceShips (name) {
                         });
                     };  
                 }; 
-
-
-
           });
 
           div.addEventListener('mouseleave', () => {
@@ -178,25 +169,25 @@ function renderPlaceShips (name) {
 
             if (axisText === 'X') {
                 if (div.dataset.xNotAllowed) {
-                    div.style.background = 'lightgoldenrodyellow';
+                    div.style.background = '#172554';
                     div.style.cursor = 'crosshair'; 
                 }
                 if (board.hasShip(div.id)) {
-                    div.style.background = 'green';
+                    div.style.background = '#15803d';
                     div.style.cursor = 'not-allowed';
                 }
                 else {
                     adjacents[0].forEach(position => {
                         if (board.hasShip(position)) {
                             div.style.cursor = 'not-allowed';
-                            div.style.background = 'lightgoldenrodyellow';
+                            div.style.background = '#172554';
                             let ubi = document.getElementById(position);
-                            ubi.style.background = 'green';
+                            ubi.style.background = '#15803d';
                         }
                         else {
                             let ubi = document.getElementById(position);
-                            ubi.style.background = 'lightgoldenrodyellow';
-                            div.style.background = 'lightgoldenrodyellow';
+                            ubi.style.background = '#172554';
+                            div.style.background = '#172554';
                         }
                     });
                 }
@@ -204,25 +195,25 @@ function renderPlaceShips (name) {
 
             if (axisText === 'Y') {
                 if (div.dataset.yNotAllowed) {
-                    div.style.background = 'lightgoldenrodyellow';
+                    div.style.background = '#172554';
                     div.style.cursor = 'crosshair'; 
                 }
                 if (board.hasShip(div.id)) {
-                    div.style.background = 'green';
+                    div.style.background = '#15803d';
                     div.style.cursor = 'not-allowed';
                 }
                 else {
                     adjacents[1].forEach(position => {
                         if (board.hasShip(position)) {
                             div.style.cursor = 'not-allowed';
-                            div.style.background = 'lightgoldenrodyellow';
+                            div.style.background = '#172554';
                             let ubi = document.getElementById(position);
-                            ubi.style.background = 'green';
+                            ubi.style.background = '#15803d';
                         }
                         else {
                             let ubi = document.getElementById(position);
-                            ubi.style.background = 'lightgoldenrodyellow';
-                            div.style.background = 'lightgoldenrodyellow';
+                            ubi.style.background = '#172554';
+                            div.style.background = '#172554';
                         }
                     });
                 }
@@ -270,7 +261,6 @@ function renderPlaceShips (name) {
                     pos += 1;
                 if (pos === ships.length) {
                         clean();
-                        //renderBothBoards(myBoard)//
                         renderInitalBoards(actualName, board);
                 }
                     myName.innerHTML = `${actualName},  place your ${ships[pos]}`;
@@ -281,7 +271,6 @@ function renderPlaceShips (name) {
           myBoard.appendChild(div);
         };
     };
-    
 
     myNameBox.appendChild(myName);
     myNameBox.appendChild(axis);
@@ -292,7 +281,6 @@ function renderPlaceShips (name) {
     main.appendChild(mySection);
     renderMyBoard(board);    
 };
-
 
 function renderInitalBoards (name, board) {
     const main = document.getElementById('main');
@@ -358,7 +346,7 @@ function renderInitalBoards (name, board) {
     main.classList.add('main-game');
     renderMyBoard(board);
     game(board);
-}
+};
 
 function renderMyBoard (board) {
     let arr = board.boardArray();
@@ -366,7 +354,7 @@ function renderMyBoard (board) {
     for (let i = 0; i < arr.length; i++) {
         if (arr[i].hasShip) {
             let box = document.getElementById(arr[i].coordinates);
-            box.style.background = 'green';
+            box.style.background = '#15803d';
         }
         if (arr[i].attacked) {
             let box = document.getElementById(arr[i].coordinates);
@@ -380,11 +368,10 @@ function renderMyBoard (board) {
         }
         if (!arr[i].hasShip && !arr[i].attacked && !arr[i].missed) {
             let box = document.getElementById(arr[i].coordinates);
-            box.style.background = 'lightgoldenrodyellow';
+            box.style.background = '#172554';
         }
     };
 };
-
 
 function renderEnemyBoard (board) {
     const boxes = document.querySelectorAll('.enemy-div-box');
@@ -402,16 +389,8 @@ function renderEnemyBoard (board) {
             box.innerHTML = '💦';
             box.style.background = 'lightblue';
         }
-        if (board.board[num].hasShip) {
-            box.innerHTML = '🚢';
-            box.style.background = 'lightblue';
-        }
     }
-}
-
-
-
-
+};
 
 function renderWin () {
     const main = document.getElementById('main');
@@ -436,7 +415,7 @@ function renderWin () {
         clean();
         writeName();
     });
-}
+};
 
 function renderLose () {
     const main = document.getElementById('main');
@@ -461,12 +440,12 @@ function renderLose () {
         clean();
         writeName();
     });
-}
+};
 
 function clean () {
     const main = document.getElementById('main');
     main.innerHTML = '';
-}
+};
 
 
 export {writeName, clean, renderInitalBoards, renderMyBoard, renderEnemyBoard, renderWin, renderLose};
