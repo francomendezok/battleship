@@ -377,7 +377,7 @@ a {
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 100%;
+        font-size: 50%;
     }
     
     .main-game {
@@ -554,7 +554,7 @@ a {
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 100%;
+        font-size: 50%;
     }
     
     .main-game {
